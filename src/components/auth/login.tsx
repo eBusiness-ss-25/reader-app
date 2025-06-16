@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 
 const loginSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email" }),
-  password: z.string().min(1, { message: "Password is required" }),
+  email: z.string().email({ message: "Bitte gib eine gültige E-Mail Adresse ein" }),
+  password: z.string().min(1, { message: "Bitte gib dein Passwort ein" }),
 });
 import AuthAPI from '@/lib/api/auth/auth';
 import { useRouter } from 'next/navigation'
@@ -17,6 +17,7 @@ export default function Login() {
   const authAPI = new AuthAPI();
 
   const [values, setValues] = useState({ email: "", password: "" });
+  const [touched, setTouched] = useState({ email: false, password: false });
   const [errors, setErrors] = useState<Partial<Record<keyof typeof values, string>>>(
     {}
   );
@@ -27,13 +28,15 @@ export default function Login() {
       const fieldErrors: Partial<Record<keyof typeof values, string>> = {};
       result.error.errors.forEach((err) => {
         const field = err.path[0] as keyof typeof values;
-        fieldErrors[field] = err.message;
+        if (touched[field]) {
+          fieldErrors[field] = err.message;
+        }
       });
       setErrors(fieldErrors);
     } else {
       setErrors({});
     }
-  }, [values]);
+  }, [values, touched]);
 
   const loginUser = () => {
     const result = loginSchema.safeParse(values);
@@ -51,9 +54,10 @@ export default function Login() {
         placeholder="E-Mail"
         value={values.email}
         aria-invalid={!!errors.email}
-        onChange={(e) =>
-          setValues((prev) => ({ ...prev, email: e.target.value }))
-        }
+        onChange={(e) => {
+          setTouched((prev) => ({ ...prev, email: true }));
+          setValues((prev) => ({ ...prev, email: e.target.value }));
+        }}
       />
       {errors.email && (
         <p className="text-destructive text-sm">{errors.email}</p>
@@ -63,9 +67,10 @@ export default function Login() {
         placeholder="Passwort"
         value={values.password}
         aria-invalid={!!errors.password}
-        onChange={(e) =>
-          setValues((prev) => ({ ...prev, password: e.target.value }))
-        }
+        onChange={(e) => {
+          setTouched((prev) => ({ ...prev, password: true }));
+          setValues((prev) => ({ ...prev, password: e.target.value }));
+        }}
       />
       {errors.password && (
         <p className="text-destructive text-sm">{errors.password}</p>

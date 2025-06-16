@@ -5,15 +5,15 @@ import { z } from "zod";
 
 const registerSchema = z
   .object({
-    email: z.string().email({ message: "Please enter a valid email" }),
-    username: z.string().min(3, { message: "Username must be at least 3 characters" }),
-    password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-    confirmPassword: z.string().min(6),
-    birthDate: z.date({ required_error: "Please select your birth date" }),
-    termsAccepted: z.literal(true, { errorMap: () => ({ message: "You must accept the terms" }) }),
+    email: z.string().email({ message: "Bitte gib eine gültige E-Mail Adresse ein" }),
+    username: z.string().min(3, { message: "Dein Nutzername muss mindestens 3 Zeichen lang sein" }),
+    password: z.string().min(6, { message: "Dein Passwort muss mindestens 6 Zeichen lang sein" }),
+    confirmPassword: z.string().min(6, { message: "Dein Passwort muss mindestens 6 Zeichen lang sein" }),
+    birthDate: z.date({ required_error: "Bitte wähle dein Geburtsdatum" }),
+    termsAccepted: z.literal(true, { errorMap: () => ({ message: "Du musst den Nutzungsbedingungen zustimmen" }) }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: "Die Passwörter stimmen nicht überein",
     path: ["confirmPassword"],
   });
 import { Button } from "@/components/ui/button";
@@ -52,6 +52,14 @@ export default function Register() {
     birthDate: undefined,
     termsAccepted: false,
   });
+  const [touched, setTouched] = useState({
+    email: false,
+    username: false,
+    password: false,
+    confirmPassword: false,
+    birthDate: false,
+    termsAccepted: false,
+  });
 
   const [errors, setErrors] = useState<Partial<Record<keyof typeof values, string>>>(
     {}
@@ -63,13 +71,15 @@ export default function Register() {
       const fieldErrors: Partial<Record<keyof typeof values, string>> = {};
       result.error.errors.forEach((err) => {
         const field = err.path[0] as keyof typeof values;
-        fieldErrors[field] = err.message;
+        if (touched[field]) {
+          fieldErrors[field] = err.message;
+        }
       });
       setErrors(fieldErrors);
     } else {
       setErrors({});
     }
-  }, [values]);
+  }, [values, touched]);
 
   const registerUser = () => {
     const result = registerSchema.safeParse(values);
@@ -96,9 +106,10 @@ export default function Register() {
         placeholder="Deine E-Mail Adresse"
         value={values.email}
         aria-invalid={!!errors.email}
-        onChange={(e) =>
-          setValues((prev) => ({ ...prev, email: e.target.value }))
-        }
+        onChange={(e) => {
+          setTouched((prev) => ({ ...prev, email: true }));
+          setValues((prev) => ({ ...prev, email: e.target.value }));
+        }}
       />
       {errors.email && (
         <p className="text-destructive text-sm">{errors.email}</p>
@@ -107,9 +118,10 @@ export default function Register() {
         placeholder="Dein Nutzername"
         value={values.username}
         aria-invalid={!!errors.username}
-        onChange={(e) =>
-          setValues((prev) => ({ ...prev, username: e.target.value }))
-        }
+        onChange={(e) => {
+          setTouched((prev) => ({ ...prev, username: true }));
+          setValues((prev) => ({ ...prev, username: e.target.value }));
+        }}
       />
       {errors.username && (
         <p className="text-destructive text-sm">{errors.username}</p>
@@ -119,9 +131,10 @@ export default function Register() {
         placeholder="Dein Passwort"
         value={values.password}
         aria-invalid={!!errors.password}
-        onChange={(e) =>
-          setValues((prev) => ({ ...prev, password: e.target.value }))
-        }
+        onChange={(e) => {
+          setTouched((prev) => ({ ...prev, password: true }));
+          setValues((prev) => ({ ...prev, password: e.target.value }));
+        }}
       />
       {errors.password && (
         <p className="text-destructive text-sm">{errors.password}</p>
@@ -131,9 +144,10 @@ export default function Register() {
         placeholder="Wiederhole dein Passwort"
         value={values.confirmPassword}
         aria-invalid={!!errors.confirmPassword}
-        onChange={(e) =>
-          setValues((prev) => ({ ...prev, confirmPassword: e.target.value }))
-        }
+        onChange={(e) => {
+          setTouched((prev) => ({ ...prev, confirmPassword: true }));
+          setValues((prev) => ({ ...prev, confirmPassword: e.target.value }));
+        }}
       />
       {errors.confirmPassword && (
         <p className="text-destructive text-sm">{errors.confirmPassword}</p>
@@ -157,6 +171,7 @@ export default function Register() {
             selected={values.birthDate}
             captionLayout="dropdown"
             onSelect={(date) => {
+              setTouched((prev) => ({ ...prev, birthDate: true }));
               setValues((prev) => ({ ...prev, birthDate: date || undefined }));
               setOpen(false);
             }}
@@ -172,9 +187,10 @@ export default function Register() {
           className="data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-white"
           checked={values.termsAccepted}
           aria-invalid={!!errors.termsAccepted}
-          onCheckedChange={() =>
-            setValues((prev) => ({ ...prev, termsAccepted: !prev.termsAccepted }))
-          }
+          onCheckedChange={() => {
+            setTouched((prev) => ({ ...prev, termsAccepted: true }));
+            setValues((prev) => ({ ...prev, termsAccepted: !prev.termsAccepted }));
+          }}
         />
         <div className="grid gap-1.5 font-normal">
           <p className="text-sm leading-none font-medium">
