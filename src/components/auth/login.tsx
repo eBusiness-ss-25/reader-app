@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -18,9 +19,10 @@ export default function Login() {
 
   const [values, setValues] = useState({ email: "", password: "" });
   const [touched, setTouched] = useState({ email: false, password: false });
-  const [errors, setErrors] = useState<Partial<Record<keyof typeof values, string>>>(
-    {}
-  );
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof typeof values, string>>
+  >({});
+  const [serverError, setServerError] = useState<string | null>(null);
 
   useEffect(() => {
     const result = loginSchema.safeParse(values);
@@ -38,14 +40,37 @@ export default function Login() {
     }
   }, [values, touched]);
 
-  const loginUser = () => {
+  const loginUser = async () => {
     const result = loginSchema.safeParse(values);
     if (!result.success) {
       return;
     }
-    authAPI.login(result.data.email, result.data.password).then(() => {
-      router.push('/catalog');
-    });
+    try {
+      setServerError(null);
+      await authAPI.login(result.data.email, result.data.password);
+      router.push("/catalog");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        if (status === 401) {
+          setServerError("Ung\u00fcltige E-Mail oder Passwort.");
+        } else if (status && status >= 400 && status < 500) {
+          setServerError("Deine Eingaben sind nicht korrekt.");
+        } else if (status && status >= 500) {
+          setServerError(
+            "Interner Serverfehler. Bitte versuche es sp\u00e4ter erneut."
+          );
+        } else {
+          setServerError(
+            "Unbekannter Fehler. Bitte versuche es sp\u00e4ter erneut."
+          );
+        }
+      } else {
+        setServerError(
+          "Unbekannter Fehler. Bitte versuche es sp\u00e4ter erneut."
+        );
+      }
+    }
   };
 
   return (
@@ -74,6 +99,9 @@ export default function Login() {
       />
       {errors.password && (
         <p className="text-destructive text-sm">{errors.password}</p>
+      )}
+      {serverError && (
+        <p className="text-destructive text-sm">{serverError}</p>
       )}
       <Button onClick={loginUser}>Anmelden</Button>
     </div>
