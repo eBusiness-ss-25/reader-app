@@ -61,6 +61,17 @@ An example configuration is provided in `.env.example`.
 
 A helper script is included under `agents/scripts/setup.sh`. It installs all dependencies and copies `.env.codex` to `.env` for convenience when running in Codex environments.
 
+## Pre-commit Hooks
+
+The repository provides a `.pre-commit-config.yaml` file using the [pre-commit](https://pre-commit.com/) framework. Install the tool and enable the hook so linting runs automatically before each commit:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+The hook executes `npm run lint` and blocks the commit if any ESLint errors are found.
+
 ## Notes
 
 This repository does not contain automated tests. Functionality can be verified by running the development server and the linter.
