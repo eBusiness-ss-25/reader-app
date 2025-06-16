@@ -1,6 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { z } from "zod";
+
+const registerSchema = z
+  .object({
+    email: z.string().email({ message: "Please enter a valid email" }),
+    username: z.string().min(3, { message: "Username must be at least 3 characters" }),
+    password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+    confirmPassword: z.string().min(6),
+    birthDate: z.date({ required_error: "Please select your birth date" }),
+    termsAccepted: z.literal(true, { errorMap: () => ({ message: "You must accept the terms" }) }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -20,32 +35,109 @@ export default function Register() {
   const authAPI = new AuthAPI();
 
   const [open, setOpen] = useState(false);
-  const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [termsAccepted, setTermsAccepted] = useState(false);
+
+
+  const [values, setValues] = useState<{
+    email: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
+    birthDate: Date | undefined;
+    termsAccepted: boolean;
+  }>({
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    birthDate: undefined,
+    termsAccepted: false,
+  });
+
+  const [errors, setErrors] = useState<Partial<Record<keyof typeof values, string>>>(
+    {}
+  );
+
+  useEffect(() => {
+    const result = registerSchema.safeParse(values);
+    if (!result.success) {
+      const fieldErrors: Partial<Record<keyof typeof values, string>> = {};
+      result.error.errors.forEach((err) => {
+        const field = err.path[0] as keyof typeof values;
+        fieldErrors[field] = err.message;
+      });
+      setErrors(fieldErrors);
+    } else {
+      setErrors({});
+    }
+  }, [values]);
 
   const registerUser = () => {
-    authAPI.register(
-      username,
-      email,
-      password,
-      birthDate || new Date()
-    ).then(() => {
-      authAPI.login(email, password).then(() => {
-        router.push('/catalog');
+    const result = registerSchema.safeParse(values);
+    if (!result.success) {
+      return;
+    }
+    authAPI
+      .register(
+        result.data.username,
+        result.data.email,
+        result.data.password,
+        result.data.birthDate
+      )
+      .then(() => {
+        authAPI.login(result.data.email, result.data.password).then(() => {
+          router.push('/catalog');
+        });
       });
-    });
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <Input placeholder="Deine E-Mail Adresse" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <Input placeholder="Dein Nutzername" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <Input type="password" placeholder="Dein Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <Input type="password" placeholder="Wiederhole dein Passwort" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+      <Input
+        placeholder="Deine E-Mail Adresse"
+        value={values.email}
+        aria-invalid={!!errors.email}
+        onChange={(e) =>
+          setValues((prev) => ({ ...prev, email: e.target.value }))
+        }
+      />
+      {errors.email && (
+        <p className="text-destructive text-sm">{errors.email}</p>
+      )}
+      <Input
+        placeholder="Dein Nutzername"
+        value={values.username}
+        aria-invalid={!!errors.username}
+        onChange={(e) =>
+          setValues((prev) => ({ ...prev, username: e.target.value }))
+        }
+      />
+      {errors.username && (
+        <p className="text-destructive text-sm">{errors.username}</p>
+      )}
+      <Input
+        type="password"
+        placeholder="Dein Passwort"
+        value={values.password}
+        aria-invalid={!!errors.password}
+        onChange={(e) =>
+          setValues((prev) => ({ ...prev, password: e.target.value }))
+        }
+      />
+      {errors.password && (
+        <p className="text-destructive text-sm">{errors.password}</p>
+      )}
+      <Input
+        type="password"
+        placeholder="Wiederhole dein Passwort"
+        value={values.confirmPassword}
+        aria-invalid={!!errors.confirmPassword}
+        onChange={(e) =>
+          setValues((prev) => ({ ...prev, confirmPassword: e.target.value }))
+        }
+      />
+      {errors.confirmPassword && (
+        <p className="text-destructive text-sm">{errors.confirmPassword}</p>
+      )}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -53,28 +145,36 @@ export default function Register() {
             id="date"
             className="w-full justify-between font-normal"
           >
-            {birthDate ? birthDate.toLocaleDateString() : "Dein Geburtsdatum"}
+            {values.birthDate
+              ? values.birthDate.toLocaleDateString()
+              : "Dein Geburtsdatum"}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           <Calendar
             mode="single"
-            selected={birthDate}
+            selected={values.birthDate}
             captionLayout="dropdown"
             onSelect={(date) => {
-              setBirthDate(date);
+              setValues((prev) => ({ ...prev, birthDate: date || undefined }));
               setOpen(false);
             }}
           />
         </PopoverContent>
       </Popover>
+      {errors.birthDate && (
+        <p className="text-destructive text-sm">{errors.birthDate}</p>
+      )}
       <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-accent has-[[aria-checked=true]]:bg-accent-muted">
         <Checkbox
           id="terms"
           className="data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-white"
-          checked={termsAccepted}
-          onCheckedChange={() => setTermsAccepted(!termsAccepted)}
+          checked={values.termsAccepted}
+          aria-invalid={!!errors.termsAccepted}
+          onCheckedChange={() =>
+            setValues((prev) => ({ ...prev, termsAccepted: !prev.termsAccepted }))
+          }
         />
         <div className="grid gap-1.5 font-normal">
           <p className="text-sm leading-none font-medium">
@@ -85,6 +185,9 @@ export default function Register() {
           </p>
         </div>
       </Label>
+      {errors.termsAccepted && (
+        <p className="text-destructive text-sm">{errors.termsAccepted}</p>
+      )}
       <Button onClick={registerUser}>Registrieren</Button>
     </div>
   );
