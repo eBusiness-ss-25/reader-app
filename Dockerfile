@@ -23,10 +23,13 @@ FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copy the necessary files from the builder stage
+# Copy the built assets from the builder stage
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY package.json ./
+
+# Copy both package.json and package-lock.json so that `npm ci` works
+COPY package*.json ./
+
 RUN npm ci --omit=dev
 
 EXPOSE 3000
