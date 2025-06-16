@@ -5,8 +5,20 @@ import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button';
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from '@/components/ui/label';
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { ChevronDownIcon } from 'lucide-react';
+import { useState } from 'react';
 
-export default function Home() {
+export default function AuthPage() {
+  const [open, setOpen] = useState(false)
+  const [date, setDate] = useState<Date | undefined>(undefined)
+
+
   return (
     <div className="flex min-h-screen flex-col items-center px-12 py-8 gap-4">
       <div>
@@ -30,6 +42,30 @@ export default function Home() {
             <Input placeholder="Dein Nutzername" />
             <Input type="password" placeholder="Dein Passwort" />
             <Input type="password" placeholder="Wiederhole dein Passwort" />
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  id="date"
+                  className="w-full justify-between font-normal"
+                >
+                  {date ? date.toLocaleDateString() : "Dein Geburtsdatum"}
+                  <ChevronDownIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  captionLayout="dropdown"
+                  onSelect={(date) => {
+                    setDate(date)
+                    setOpen(false)
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
+
             <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-accent has-[[aria-checked=true]]:bg-accent-muted">
               <Checkbox
                 id="terms"
