@@ -12,17 +12,40 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ChevronDownIcon } from "lucide-react";
+import AuthAPI from '@/lib/api/auth/auth';
+import { useRouter } from 'next/navigation'
 
 export default function Register() {
+  const router = useRouter()
+  const authAPI = new AuthAPI();
+
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const registerUser = () => {
+    authAPI.register(
+      username,
+      email,
+      password,
+      birthDate || new Date()
+    ).then(() => {
+      authAPI.login(email, password).then(() => {
+        router.push('/catalog');
+      });
+    });
+  };
 
   return (
     <div className="flex flex-col gap-4">
-      <Input placeholder="Deine E-Mail Adresse" />
-      <Input placeholder="Dein Nutzername" />
-      <Input type="password" placeholder="Dein Passwort" />
-      <Input type="password" placeholder="Wiederhole dein Passwort" />
+      <Input placeholder="Deine E-Mail Adresse" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <Input placeholder="Dein Nutzername" value={username} onChange={(e) => setUsername(e.target.value)} />
+      <Input type="password" placeholder="Dein Passwort" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <Input type="password" placeholder="Wiederhole dein Passwort" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -30,17 +53,17 @@ export default function Register() {
             id="date"
             className="w-full justify-between font-normal"
           >
-            {date ? date.toLocaleDateString() : "Dein Geburtsdatum"}
+            {birthDate ? birthDate.toLocaleDateString() : "Dein Geburtsdatum"}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
           <Calendar
             mode="single"
-            selected={date}
+            selected={birthDate}
             captionLayout="dropdown"
             onSelect={(date) => {
-              setDate(date);
+              setBirthDate(date);
               setOpen(false);
             }}
           />
@@ -50,6 +73,8 @@ export default function Register() {
         <Checkbox
           id="terms"
           className="data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-white"
+          checked={termsAccepted}
+          onCheckedChange={() => setTermsAccepted(!termsAccepted)}
         />
         <div className="grid gap-1.5 font-normal">
           <p className="text-sm leading-none font-medium">
@@ -60,7 +85,7 @@ export default function Register() {
           </p>
         </div>
       </Label>
-      <Button>Registrieren</Button>
+      <Button onClick={registerUser}>Registrieren</Button>
     </div>
   );
 }
