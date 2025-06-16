@@ -5,6 +5,8 @@ export default class AuthAPI {
   private static authCookieName = process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME || 'auth_token';
   private static apiUrl = process.env.NEXT_PUBLIC_BOOK_API || 'https://ebusiness-api.helixhub.info';
 
+  private static userId = process.env.NEXT_PUBLIC_USER_ID || 'user_id';
+
   public isAuthenticated(): boolean {
     const cookieValue = Cookies.get(AuthAPI.authCookieName);
 
@@ -16,12 +18,17 @@ export default class AuthAPI {
     return cookieValue || null;
   }
 
+  public getUserId(): string | null {
+    const userId = Cookies.get(AuthAPI.userId);
+    return userId || null;
+  }
+
   public async login(email: string, password: string): Promise<void> {
     // build full URL using the base API URL from env
     const url = `${AuthAPI.apiUrl}/auth/login`;
 
     // send POST to your real backend (expecting { token: string } in response)
-    const response = await axios.post<{ token: string }>(
+    const response = await axios.post<{ token: string; userId: string; }>(
       url,
       { email, password }
     );
@@ -31,6 +38,10 @@ export default class AuthAPI {
 
     // store it in a cookie
     Cookies.set(AuthAPI.authCookieName, token, { expires: 7 });
+
+    // Store user ID in a cookie
+    const userId = response.data.userId || AuthAPI.userId;
+    Cookies.set(AuthAPI.userId, userId, { expires: 7 });
   }
 
   /**
