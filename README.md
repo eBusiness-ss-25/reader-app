@@ -43,6 +43,16 @@ Run ESLint to check the codebase:
 npm run lint
 ```
 
+### Docker Image
+
+The project includes a `Dockerfile` based on **Node 22 Alpine**. Build the image
+and run the container with:
+
+```bash
+docker build -t reader-app .
+docker run -p 3000:3000 reader-app
+```
+
 ## Directory Overview
 
 - `src/app` – root layout and pages used by Next.js
