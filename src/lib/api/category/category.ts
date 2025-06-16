@@ -29,4 +29,25 @@ export default class CategoryAPI {
         // falls response.data ein Array ist, sonst ggf. response.data.data etc.
         return response.data;
     }
+
+    public async getCategoryWithBooks(): Promise<
+        {
+            id: string;
+            name: string;
+            createdAt: "2025-06-16T16:48:35.922Z";
+            updatedAt: "2025-06-16T16:48:35.922Z"
+            Books: {
+                id: string;
+                title: string;}[]
+        }[]
+    > {
+        const url = `${CategoryAPI.apiUrl}/category/?relations=Books`;
+        const token = await this.authApi.getAuthToken();
+        const response = await axios.get(url, {
+            headers: {Authorization: `Bearer ${token}`},
+        });
+
+        // falls response.data ein Array ist, sonst ggf. response.data.data etc.
+        return response.data;
+    }
 }
