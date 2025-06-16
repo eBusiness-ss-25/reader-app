@@ -33,9 +33,10 @@ export default function Register() {
       email,
       password,
       birthDate || new Date()
-    ).then((response) => {
-      console.log("User registered successfully:", response);
-      router.push('/katalog');
+    ).then(() => {
+      authAPI.login(email, password).then(() => {
+        router.push('/katalog');
+      });
     });
   };
 
