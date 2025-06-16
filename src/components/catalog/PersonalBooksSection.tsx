@@ -1,16 +1,19 @@
+// components/catalog/PersonalBooksSection.tsx
+
 "use client";
 
 import { useEffect, useState } from "react";
 import BookAPI from "@/lib/api/book/book";
 import { CatalogSection } from "@/components/catalog/CatalogSection";
-import { BookCard } from "./BookCard";
+import { UserBookCard } from "@/components/catalog/UserBookCard";
 
-// Book- und UserBook-Typen
+// Typen
 type Book = {
   id: string;
   title: string;
   author?: string;
   introduction?: string;
+  numPages?: number;
 };
 
 type UserBook = {
@@ -30,7 +33,6 @@ export default function PersonalBooksSection() {
         const data = await api.getBooksForUser();
         setUserBooks(data);
       } catch (err) {
-        // Optionale Fehlerbehandlung
         setUserBooks([]);
       } finally {
         setLoading(false);
@@ -46,11 +48,13 @@ export default function PersonalBooksSection() {
         <div className="col-span-2 text-sm text-muted-foreground">Lädt…</div>
       ) : userBooks.length > 0 ? (
         userBooks.map((entry) => (
-          <BookCard
+          <UserBookCard
             key={entry.book.id}
             title={entry.book.title}
             author={entry.book.author}
             introduction={entry.book.introduction}
+            bookPage={entry.bookPage}
+            numPages={entry.book.numPages ?? 0}
           />
         ))
       ) : (
