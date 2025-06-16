@@ -1,6 +1,6 @@
 # Reader App
 
-This project is a Next.js 15 application written in TypeScript. It provides a small authentication interface consisting of login and registration forms. The UI is built with Tailwind CSS and Radix UI components.
+This project is a Next.js 15 application written in TypeScript. It provides a small authentication interface consisting of login and registration forms. The UI is built with Tailwind CSS and Radix UI components. Client-side form validation is powered by [Zod](https://github.com/colinhacks/zod).
 
 ## Requirements
 
