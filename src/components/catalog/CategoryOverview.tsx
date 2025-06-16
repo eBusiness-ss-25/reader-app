@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import CategoryAPI from "@/lib/api/category/category";
-import { CategorySection } from "@/components/catalog/category-section";
+import { CatalogSection } from "@/components/catalog/CatalogSection";
 import { BookCard } from "./BookCard";
 
 type Book = {
@@ -51,7 +51,7 @@ export default function CategoryOverview() {
   return (
     <div className="space-y-8">
       {categories.map((category) => (
-        <CategorySection key={category.id} title={category.name}>
+        <CatalogSection key={category.id} title={category.name}>
           {category.Books && category.Books.length > 0 ? (
             category.Books.map((book) => (
               <BookCard
@@ -66,7 +66,7 @@ export default function CategoryOverview() {
               Noch keine Bücher in dieser Kategorie.
             </div>
           )}
-        </CategorySection>
+        </CatalogSection>
       ))}
     </div>
   );

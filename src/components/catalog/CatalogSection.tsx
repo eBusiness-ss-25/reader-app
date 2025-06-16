@@ -1,19 +1,19 @@
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type CategorySectionProps = {
+type CatalogSection = {
   title: string;
   children?: React.ReactNode;
   className?: string;
   onTitleClick?: () => void;
 };
 
-export function CategorySection({
+export function CatalogSection({
   title,
   children,
   className,
   onTitleClick,
-}: CategorySectionProps) {
+}: CatalogSection) {
   return (
     <section className={cn("mb-8", className)}>
       <div className="flex items-center justify-between mb-2">
