@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { z } from "zod";
+import Loading from "../common/Loading";
 
 const registerSchema = z
   .object({
@@ -66,6 +67,7 @@ export default function Register() {
     Partial<Record<keyof typeof values, string>>
   >({});
   const [serverError, setServerError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const result = registerSchema.safeParse(values);
@@ -88,8 +90,10 @@ export default function Register() {
     if (!result.success) {
       return;
     }
+    setServerError(null);
+    setIsLoading(true);
+
     try {
-      setServerError(null);
       await authAPI.register(
         result.data.username,
         result.data.email,
@@ -119,8 +123,14 @@ export default function Register() {
           "Unbekannter Fehler. Bitte versuche es sp\u00e4ter erneut."
         );
       }
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex flex-col gap-4">

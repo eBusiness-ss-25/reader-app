@@ -12,17 +12,18 @@ const loginSchema = z.object({
 });
 import AuthAPI from '@/lib/api/auth/auth';
 import { useRouter } from 'next/navigation'
+import Loading from '../common/Loading';
 
 export default function Login() {
-  const router = useRouter()
+  const router = useRouter();
   const authAPI = new AuthAPI();
 
   const [values, setValues] = useState({ email: "", password: "" });
   const [touched, setTouched] = useState({ email: false, password: false });
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof typeof values, string>>
-  >({});
+  const [errors, setErrors] = useState<Partial<Record<keyof typeof values, string>>>({});
   const [serverError, setServerError] = useState<string | null>(null);
+  // Local state to track loading status
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const result = loginSchema.safeParse(values);
@@ -45,8 +46,10 @@ export default function Login() {
     if (!result.success) {
       return;
     }
+    // Reset server error and show loader
+    setServerError(null);
+    setIsLoading(true);
     try {
-      setServerError(null);
       await authAPI.login(result.data.email, result.data.password);
       router.push("/catalog");
     } catch (error: unknown) {
@@ -70,8 +73,16 @@ export default function Login() {
           "Unbekannter Fehler. Bitte versuche es sp\u00e4ter erneut."
         );
       }
+    } finally {
+      // Hide loader once API call finishes
+      setIsLoading(false);
     }
   };
+
+  // If loading, render the full-screen loader overlay
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex flex-col gap-4">
