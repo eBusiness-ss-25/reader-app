@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center px-12 py-8 gap-4">
       <div>
-        <Image src="/reader-logo.jpeg" width={150} height={150} alt='Logo' />
+        <Image src="/reader-logo.png" width={150} height={150} alt='Logo' />
       </div>
       <Tabs defaultValue="login" className="w-full">
         <TabsList className='w-full justify-center'>
@@ -30,10 +30,10 @@ export default function Home() {
             <Input placeholder="Dein Nutzername" />
             <Input type="password" placeholder="Dein Passwort" />
             <Input type="password" placeholder="Wiederhole dein Passwort" />
-            <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-blue-600 has-[[aria-checked=true]]:bg-blue-50 dark:has-[[aria-checked=true]]:border-blue-900 dark:has-[[aria-checked=true]]:bg-blue-950">
+            <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-accent has-[[aria-checked=true]]:bg-accent-muted">
               <Checkbox
                 id="terms"
-                className="data-[state=checked]:border-blue-600 data-[state=checked]:bg-blue-600 data-[state=checked]:text-white dark:data-[state=checked]:border-blue-700 dark:data-[state=checked]:bg-blue-700"
+                className="data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-white"
               />
               <div className="grid gap-1.5 font-normal">
                 <p className="text-sm leading-none font-medium">
