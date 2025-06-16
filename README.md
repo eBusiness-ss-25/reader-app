@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Reader App
+
+This project is a Next.js 15 application written in TypeScript. It provides a small authentication interface consisting of login and registration forms. The UI is built with Tailwind CSS and Radix UI components.
+
+## Requirements
+
+- Node.js 18 or newer
+- NPM (or any compatible package manager)
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies and create a local `.env` file. You can run the setup script or copy the example file manually:
+
+```bash
+npm install
+cp .env.example .env   # or run ./agents/scripts/setup.sh
+```
+
+### Development
+
+Start the development server with:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Navigate to `http://localhost:3000` to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### Linting
 
-To learn more about Next.js, take a look at the following resources:
+Run ESLint to check the codebase:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Directory Overview
 
-## Deploy on Vercel
+- `src/app` – root layout and pages used by Next.js
+- `src/components` – reusable UI and authentication components
+- `src/lib` – utility functions and API wrappers
+- `public` – static assets such as the application logo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Environment Variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The application expects the following variables in a `.env` file:
+
+- `NEXT_PUBLIC_BOOK_API` – base URL of the backend API
+- `NEXT_PUBLIC_AUTH_COOKIE_NAME` – cookie name used to store the auth token
+
+An example configuration is provided in `.env.example`.
+
+## Agent Setup Script
+
+A helper script is included under `agents/scripts/setup.sh`. It installs all dependencies and copies `.env.codex` to `.env` for convenience when running in Codex environments.
+
+## Notes
+
+This repository does not contain automated tests. Functionality can be verified by running the development server and the linter.
