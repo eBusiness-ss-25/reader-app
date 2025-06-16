@@ -35,7 +35,7 @@ export default function Register() {
       birthDate || new Date()
     ).then(() => {
       authAPI.login(email, password).then(() => {
-        router.push('/katalog');
+        router.push('/catalog');
       });
     });
   };

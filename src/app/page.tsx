@@ -11,7 +11,7 @@ export default function AuthPage() {
   const authAPI = new AuthAPI();
 
   if (authAPI.isAuthenticated()) {
-    router.push('/katalog')
+    router.push('/catalog')
   }
 
   return (
