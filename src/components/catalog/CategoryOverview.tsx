@@ -29,7 +29,6 @@ type CategoryWithBooks = {
 // ];
 
 export default function CategoryOverview() {
-  const categoryAPI = new CategoryAPI();
   const [categories, setCategories] = useState<CategoryWithBooks[]>([]);
   const [loading, setLoading] = useState(true);
 
