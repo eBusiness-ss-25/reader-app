@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { z } from "zod";
 
 const registerSchema = z
@@ -61,9 +62,10 @@ export default function Register() {
     termsAccepted: false,
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof typeof values, string>>>(
-    {}
-  );
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof typeof values, string>>
+  >({});
+  const [serverError, setServerError] = useState<string | null>(null);
 
   useEffect(() => {
     const result = registerSchema.safeParse(values);
@@ -81,23 +83,43 @@ export default function Register() {
     }
   }, [values, touched]);
 
-  const registerUser = () => {
+  const registerUser = async () => {
     const result = registerSchema.safeParse(values);
     if (!result.success) {
       return;
     }
-    authAPI
-      .register(
+    try {
+      setServerError(null);
+      await authAPI.register(
         result.data.username,
         result.data.email,
         result.data.password,
         result.data.birthDate
-      )
-      .then(() => {
-        authAPI.login(result.data.email, result.data.password).then(() => {
-          router.push('/catalog');
-        });
-      });
+      );
+      await authAPI.login(result.data.email, result.data.password);
+      router.push("/catalog");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        if (status === 401) {
+          setServerError("Ung\u00fcltige Zugangsdaten.");
+        } else if (status && status >= 400 && status < 500) {
+          setServerError("Deine Eingaben sind nicht korrekt.");
+        } else if (status && status >= 500) {
+          setServerError(
+            "Interner Serverfehler. Bitte versuche es sp\u00e4ter erneut."
+          );
+        } else {
+          setServerError(
+            "Unbekannter Fehler. Bitte versuche es sp\u00e4ter erneut."
+          );
+        }
+      } else {
+        setServerError(
+          "Unbekannter Fehler. Bitte versuche es sp\u00e4ter erneut."
+        );
+      }
+    }
   };
 
   return (
@@ -203,6 +225,9 @@ export default function Register() {
       </Label>
       {errors.termsAccepted && (
         <p className="text-destructive text-sm">{errors.termsAccepted}</p>
+      )}
+      {serverError && (
+        <p className="text-destructive text-sm">{serverError}</p>
       )}
       <Button onClick={registerUser}>Registrieren</Button>
     </div>
