@@ -12,8 +12,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ChevronDownIcon } from "lucide-react";
+import AuthAPI from '@/lib/api/auth/auth';
+import { useRouter } from 'next/navigation'
 
 export default function Register() {
+  const router = useRouter()
+  const authAPI = new AuthAPI();
+
   const [open, setOpen] = useState(false);
   const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
   const [username, setUsername] = useState("");
@@ -21,6 +26,18 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const registerUser = () => {
+    authAPI.register(
+      username,
+      email,
+      password,
+      birthDate || new Date()
+    ).then((response) => {
+      console.log("User registered successfully:", response);
+      router.push('/katalog');
+    });
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -67,7 +84,7 @@ export default function Register() {
           </p>
         </div>
       </Label>
-      <Button>Registrieren</Button>
+      <Button onClick={registerUser}>Registrieren</Button>
     </div>
   );
 }
