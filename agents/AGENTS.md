@@ -2,6 +2,7 @@
 
 - Always write your code in English
 - Document every change or addition you make
+- Every text that is visible in the frontend should be written in German. The audience is german but the developers are english
 
 ## Setup
 
