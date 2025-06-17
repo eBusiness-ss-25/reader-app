@@ -17,10 +17,9 @@ export default function BookSearchBox() {
         )}
         <Input
           type="text"
-          placeholder="Buchtitel suchen"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className={value === "" ? "text-center placeholder-transparent" : "text-start"}
+          className={value === "h-12" ? "text-center placeholder-transparent h-12" : "text-start h-12"}
         />
       </div>
     </div>
