@@ -24,6 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
+      <head>
+        <script defer data-domain="ebusiness.helixhub.info" src="https://plausible.forgeodyssey.com/js/script.js"></script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
