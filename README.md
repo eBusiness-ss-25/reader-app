@@ -57,6 +57,7 @@ docker run -p 3000:3000 reader-app
 
 - `src/app` – root layout and pages used by Next.js
 - `src/components` – reusable UI and authentication components
+- `src/components/search` – building blocks for the search page
 - `src/lib` – utility functions and API wrappers
 - `public` – static assets such as the application logo
 
