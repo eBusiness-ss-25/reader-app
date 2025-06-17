@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import CategoryAPI from "@/lib/api/category/category";
 import { CatalogSection } from "@/components/catalog/CatalogSection";
 import { BookCard } from "./BookCard";
+import { useCatalogLoading } from "@/lib/hooks/useCatalogLoading";
 
 type Book = {
   id: string;
@@ -31,6 +32,7 @@ type CategoryWithBooks = {
 export default function CategoryOverview() {
   const [categories, setCategories] = useState<CategoryWithBooks[]>([]);
   const [loading, setLoading] = useState(true);
+  const { setComponentLoading } = useCatalogLoading();
 
   useEffect(() => {
     const api = new CategoryAPI();
@@ -46,11 +48,16 @@ export default function CategoryOverview() {
     // }, 300); // 300ms Fake-Loading für echtes Gefühl
   }, []);
 
-  if (loading) return <div>Lade Kategorien...</div>;
+  useEffect(() => {
+    setComponentLoading("categories", loading);
+    return () => setComponentLoading("categories", false);
+  }, [loading, setComponentLoading]);
 
   return (
     <div className="space-y-8">
-      {categories.map((category) => (
+      {loading ? (
+        <div className="text-sm text-muted-foreground">Lädt…</div>
+      ) : categories.map((category) => (
         <CatalogSection key={category.id} title={category.name}>
           {category.Books && category.Books.length > 0 ? (
             category.Books.map((book) => (
