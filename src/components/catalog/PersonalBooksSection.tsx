@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import BookAPI from "@/lib/api/book/book";
 import { CatalogSection } from "@/components/catalog/CatalogSection";
 import { UserBookCard } from "@/components/catalog/UserBookCard";
+import { useCatalogLoading } from "@/lib/hooks/useCatalogLoading";
 
 // Typen
 type Book = {
@@ -25,6 +26,7 @@ type UserBook = {
 export default function PersonalBooksSection() {
   const [userBooks, setUserBooks] = useState<UserBook[]>([]);
   const [loading, setLoading] = useState(true);
+  const { setComponentLoading } = useCatalogLoading();
 
   useEffect(() => {
     const fetchUserBooks = async () => {
@@ -41,6 +43,11 @@ export default function PersonalBooksSection() {
 
     fetchUserBooks();
   }, []);
+
+  useEffect(() => {
+    setComponentLoading("personalBooks", loading);
+    return () => setComponentLoading("personalBooks", false);
+  }, [loading, setComponentLoading]);
 
   return (
     <CatalogSection title="Deine Bücher">
