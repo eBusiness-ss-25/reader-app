@@ -8,7 +8,7 @@ import { CatalogSection } from "@/components/catalog/CatalogSection";
 import { UserBookCard } from "@/components/catalog/UserBookCard";
 import { useCatalogLoading } from "@/lib/hooks/useCatalogLoading";
 
-// Typen
+// Types
 type Book = {
   id: string;
   title: string;
@@ -46,13 +46,12 @@ export default function PersonalBooksSection() {
 
   useEffect(() => {
     setComponentLoading("personalBooks", loading);
-    return () => setComponentLoading("personalBooks", false);
   }, [loading, setComponentLoading]);
 
   return (
-    <CatalogSection title="Deine Bücher">
+    <CatalogSection title="Your Books">
       {loading ? (
-        <div className="col-span-2 text-sm text-muted-foreground">Lädt…</div>
+        <div className="col-span-2 text-sm text-muted-foreground">Loading…</div>
       ) : userBooks.length > 0 ? (
         userBooks.map((entry) => (
           <UserBookCard
@@ -66,7 +65,7 @@ export default function PersonalBooksSection() {
         ))
       ) : (
         <div className="col-span-2 text-sm text-muted-foreground">
-          Du hast noch keine eigenen Bücher!
+          You don&apos;t have any books yet!
         </div>
       )}
     </CatalogSection>

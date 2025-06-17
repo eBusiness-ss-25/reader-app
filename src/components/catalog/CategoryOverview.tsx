@@ -11,7 +11,7 @@ type Book = {
   title: string;
   author?: string;
   introduction?: string;
-  // weitere Felder falls nötig
+  // additional fields if needed
 };
 
 type CategoryWithBooks = {
@@ -19,15 +19,6 @@ type CategoryWithBooks = {
   name: string;
   Books: Book[];
 };
-
-//TODO: Mockdaten erweiteren, um Buchcards anzuzeigen
-// const mockCategories: CategoryWithBooks[] = [
-//   { id: "1", name: "Fiktion" },
-//   { id: "2", name: "Sachbuch" },
-//   { id: "3", name: "Kinder- und Jugendbücher" },
-//   { id: "4", name: "Science-Fiction" },
-//   { id: "5", name: "Fantasy" },
-// ];
 
 export default function CategoryOverview() {
   const [categories, setCategories] = useState<CategoryWithBooks[]>([]);
@@ -40,23 +31,16 @@ export default function CategoryOverview() {
       .getCategoryWithBooks()
       .then(setCategories)
       .finally(() => setLoading(false));
-
-    // MOCKDATEN nutzen:
-    // setTimeout(() => {
-    //   setCategories(mockCategories);
-    //   setLoading(false);
-    // }, 300); // 300ms Fake-Loading für echtes Gefühl
   }, []);
 
   useEffect(() => {
     setComponentLoading("categories", loading);
-    return () => setComponentLoading("categories", false);
   }, [loading, setComponentLoading]);
 
   return (
     <div className="space-y-8">
       {loading ? (
-        <div className="text-sm text-muted-foreground">Lädt…</div>
+        <div className="text-sm text-muted-foreground">Loading…</div>
       ) : categories.map((category) => (
         <CatalogSection key={category.id} title={category.name}>
           {category.Books && category.Books.length > 0 ? (
@@ -70,7 +54,7 @@ export default function CategoryOverview() {
             ))
           ) : (
             <div className="col-span-2 text-sm text-muted-foreground">
-              Noch keine Bücher in dieser Kategorie.
+              No books in this category yet.
             </div>
           )}
         </CatalogSection>

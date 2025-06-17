@@ -1,4 +1,4 @@
-"use-client";
+"use client";
 import CategoryOverview from "@/components/catalog/CategoryOverview";
 import PersonalBooksSection from "@/components/catalog/PersonalBooksSection";
 import { SearchButton } from "@/components/catalog/SearchButton";

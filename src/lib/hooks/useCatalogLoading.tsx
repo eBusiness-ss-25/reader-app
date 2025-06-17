@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useCallback } from "react";
 
 /**
  * Context value storing loading states for multiple components.
@@ -23,9 +23,9 @@ const CatalogLoadingContext = createContext<CatalogLoadingContextValue | undefin
 export function CatalogLoadingProvider({ children }: { children: ReactNode }) {
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({});
 
-  const setComponentLoading = (name: string, loading: boolean) => {
+  const setComponentLoading = useCallback((name: string, loading: boolean) => {
     setLoadingMap((prev) => ({ ...prev, [name]: loading }));
-  };
+  }, []);
 
   const isLoading = Object.values(loadingMap).some(Boolean);
 
