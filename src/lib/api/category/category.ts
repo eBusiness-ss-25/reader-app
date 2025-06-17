@@ -51,3 +51,11 @@ export default class CategoryAPI {
         return response.data;
     }
 }
+
+export interface Category {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  icon?: string;
+}
