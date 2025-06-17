@@ -31,7 +31,7 @@ export default function AuthPage() {
         <Image src="/reader-logo.png" width={150} height={150} alt="Logo" />
       </div>
       <Tabs defaultValue="login" className="w-full">
-        <TabsList className="w-full justify-center">
+        <TabsList className="w-full justify-center mb-4">
           <TabsTrigger value="login">Anmelden</TabsTrigger>
           <TabsTrigger value="register">Registrieren</TabsTrigger>
         </TabsList>
