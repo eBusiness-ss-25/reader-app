@@ -24,7 +24,7 @@ export default class BookAPI {
         introduction?: string;
         publishedAt?: string;
         categoryId?: string;
-        [key: string]: any;
+        [key: string]: unknown;
       };
     }[]
   > {

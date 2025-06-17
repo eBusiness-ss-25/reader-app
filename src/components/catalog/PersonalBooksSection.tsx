@@ -32,7 +32,7 @@ export default function PersonalBooksSection() {
         const api = new BookAPI();
         const data = await api.getBooksForUser();
         setUserBooks(data);
-      } catch (err) {
+      } catch {
         setUserBooks([]);
       } finally {
         setLoading(false);
