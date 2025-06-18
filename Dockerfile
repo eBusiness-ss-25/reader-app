@@ -18,19 +18,16 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-# Production image
+# Production image with Node.js and serve
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copy the built assets from the builder stage
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
+# Install serve globally
+RUN npm install -g serve
 
-# Copy both package.json and package-lock.json so that `npm ci` works
-COPY package*.json ./
-
-RUN npm ci --omit=dev
+# Copy the static export from the builder stage
+COPY --from=builder /app/out ./out
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["serve", "-s", "out", "-l", "3000"]
