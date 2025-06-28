@@ -47,6 +47,7 @@ export default function CategoryOverview() {
             {category.Books && category.Books.length > 0 ? (
               category.Books.map((book) => (
                 <BookCard
+                  id={book.id}
                   key={book.id}
                   title={book.title}
                   author={book.author}

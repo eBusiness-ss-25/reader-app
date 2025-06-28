@@ -51,6 +51,7 @@ export default function PersonalBooksSection() {
       ) : userBooks.length > 0 ? (
         userBooks.map((entry) => (
           <BookCard
+            id={entry.book.id}
             key={entry.book.id}
             title={entry.book.title}
             author={entry.book.author}
