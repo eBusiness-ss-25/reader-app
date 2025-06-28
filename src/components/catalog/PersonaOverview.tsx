@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from "react";
 import BookAPI from "@/lib/api/book/book";
-import { CatalogSection } from "@/components/catalog/CatalogSection";
+import { Section } from "@/components/catalog/Section";
 import { UserBookCard } from "@/components/catalog/UserBookCard";
 import { useCatalogLoading } from "@/lib/hooks/useCatalogLoading";
 
@@ -49,7 +49,7 @@ export default function PersonalBooksSection() {
   }, [loading, setComponentLoading]);
 
   return (
-    <CatalogSection title="Your Books">
+    <Section title="Your Books">
       {loading ? (
         <div className="col-span-2 text-sm text-muted-foreground">Loading…</div>
       ) : userBooks.length > 0 ? (
@@ -68,6 +68,6 @@ export default function PersonalBooksSection() {
           You don&apos;t have any books yet!
         </div>
       )}
-    </CatalogSection>
+    </Section>
   );
 }

@@ -1,19 +1,15 @@
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-type CatalogSection = {
+type Section = {
   title: string;
   children?: React.ReactNode;
   className?: string;
   onTitleClick?: () => void;
 };
 
-export function CatalogSection({
-  title,
-  children,
-  className,
-  onTitleClick,
-}: CatalogSection) {
+export function Section({ title, children, className, onTitleClick }: Section) {
   return (
     <section className={cn("mb-8", className)}>
       <div className="flex items-center justify-between mb-2">
@@ -27,9 +23,10 @@ export function CatalogSection({
           <ArrowRight size={20} />
         </button>
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        {children}
-      </div>
+      <ScrollArea className="w-full">
+        <div className="flex gap-4 min-w-full">{children}</div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </section>
   );
 }

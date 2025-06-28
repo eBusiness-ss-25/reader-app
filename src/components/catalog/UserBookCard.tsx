@@ -1,5 +1,3 @@
-// components/catalog/UserBookCard.tsx
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
@@ -21,7 +19,7 @@ export function UserBookCard({
   const progress = numPages ? (bookPage / numPages) * 100 : 0;
 
   return (
-    <Card className="min-h-[120px] bg-gradient-to-br from-purple-400 to-pink-400 shadow-md text-white">
+    <Card className="min-h-[120px] min-w-[140px] max-w-[180px] w-full bg-gradient-to-br from-purple-400 to-pink-400 shadow-md text-white">
       <CardContent className="p-4 flex flex-col justify-between h-full">
         <div>
           <div className="font-semibold text-base mb-1">{title}</div>
