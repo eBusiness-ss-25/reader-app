@@ -1,12 +1,25 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 type BookCardProps = {
   title: string;
   author?: string;
   introduction?: string;
+  bookPage?: number;
+  numPages?: number;
 };
 
-export function BookCard({ title, author, introduction }: BookCardProps) {
+export function BookCard({
+  title,
+  author,
+  introduction,
+  bookPage,
+  numPages,
+}: BookCardProps) {
+  const showProgress =
+    typeof bookPage === "number" && typeof numPages === "number";
+  const progress = showProgress && numPages ? (bookPage! / numPages) * 100 : 0;
+
   return (
     <Card className="min-h-[120px] min-w-[140px] max-w-[180px] w-full bg-gradient-to-br from-purple-400 to-pink-400 shadow-md text-white">
       <CardContent className="p-4 flex flex-col justify-between h-full">
@@ -19,7 +32,12 @@ export function BookCard({ title, author, introduction }: BookCardProps) {
             </div>
           )}
         </div>
-        {/* Platz für Progressbar, Actions, etc. */}
+        {showProgress && (
+          <div className="mt-3">
+            <Progress value={progress} className="h-2 bg-white/30" />
+            <div className="text-xs mt-1">{Math.round(progress)}% gelesen</div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

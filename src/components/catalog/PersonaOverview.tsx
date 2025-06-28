@@ -1,11 +1,7 @@
-// components/catalog/PersonalBooksSection.tsx
-
-"use client";
-
 import { useEffect, useState } from "react";
 import BookAPI from "@/lib/api/book/book";
 import { Section } from "@/components/catalog/Section";
-import { UserBookCard } from "@/components/catalog/UserBookCard";
+import { BookCard } from "@/components/catalog/BookCard";
 import { useCatalogLoading } from "@/lib/hooks/useCatalogLoading";
 
 // Types
@@ -54,7 +50,7 @@ export default function PersonalBooksSection() {
         <div className="col-span-2 text-sm text-muted-foreground">Loading…</div>
       ) : userBooks.length > 0 ? (
         userBooks.map((entry) => (
-          <UserBookCard
+          <BookCard
             key={entry.book.id}
             title={entry.book.title}
             author={entry.book.author}
