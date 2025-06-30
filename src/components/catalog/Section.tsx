@@ -8,9 +8,10 @@ type Section = {
   children?: React.ReactNode;
   className?: string;
   onTitleClick?: () => void;
+  variant?: "horizontal" | "grid";
 };
 
-export function Section({ title, children, className, onTitleClick }: Section) {
+export function Section({ title, children, className, variant = "horizontal" }: Section) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -21,7 +22,7 @@ export function Section({ title, children, className, onTitleClick }: Section) {
           className="flex items-center text-muted-foreground hover:text-primary transition"
           onClick={() => setExpanded((prev) => !prev)}
           aria-label={
-            expanded ? `Section zuklappen` : `Alle Bücher in ${title}`
+            expanded ? `Collapse section` : `Show all books in ${title}`
           }
           type="button"
         >
@@ -29,12 +30,17 @@ export function Section({ title, children, className, onTitleClick }: Section) {
         </button>
       </div>
       {expanded ? (
-        // Aufgeklappt: Bücher untereinander (z.B. Grid)
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        // Expanded: Books in grid layout, 2 columns on mobile
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {children}
+        </div>
+      ) : variant === "grid" ? (
+        // Grid: 2 columns on mobile, more on larger screens
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {children}
         </div>
       ) : (
-        // Standard: Horizontal scrollbare Bücher
+        // Standard: Horizontal scrollable books
         <ScrollArea className="w-full">
           <div className="flex gap-4 min-w-full">{children}</div>
           <ScrollBar orientation="horizontal" />
