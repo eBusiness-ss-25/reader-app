@@ -69,13 +69,13 @@ export function BookCard({
             </DrawerDescription>
           </DrawerHeader>
           {image && 
-          
-            <div className="max-w-1/2">
-              <AspectRatio ratio={3 / 4} className="w-full">
-                <Image src={image} alt="test" fill className="h-full w-full"/>
-              </AspectRatio>
+            <div className="flex justify-center px-4">
+              <div className="w-1/2 max-w-xs">
+                <AspectRatio ratio={3 / 4} className="w-full">
+                  <Image src={image} alt={title} fill className="h-full w-full object-cover rounded-md"/>
+                </AspectRatio>
+              </div>
             </div>
-          
           }
           <div>
             {introduction}
