@@ -60,6 +60,15 @@ export function BookCard({
           </AspectRatio>
         </DrawerTrigger>
         <DrawerContent className="h-full">
+          {image && 
+            <div className="flex justify-center px-4 mt-4">
+              <div className="w-2/3 max-w-xs">
+                <AspectRatio ratio={3 / 4} className="w-full">
+                  <Image src={image} alt={title} fill className="h-full w-full object-cover rounded-md"/>
+                </AspectRatio>
+              </div>
+            </div>
+          }
           <DrawerHeader>
             <DrawerTitle>
               {title}   
@@ -68,16 +77,8 @@ export function BookCard({
               {author}  
             </DrawerDescription>
           </DrawerHeader>
-          {image && 
-            <div className="flex justify-center px-4">
-              <div className="w-1/2 max-w-xs">
-                <AspectRatio ratio={3 / 4} className="w-full">
-                  <Image src={image} alt={title} fill className="h-full w-full object-cover rounded-md"/>
-                </AspectRatio>
-              </div>
-            </div>
-          }
-          <div>
+          <b className="px-8 py-4">Description</b>
+          <div className="px-8">
             {introduction}
           </div>
           <DrawerFooter>
