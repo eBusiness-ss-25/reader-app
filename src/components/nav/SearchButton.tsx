@@ -15,7 +15,7 @@ export function SearchButton() {
     <Button
       variant="secondary"
       size="icon"
-      className="size-8 absolute top-0 right-0"
+      className="size-8"
       onClick={handleSearch}
     >
       <Search />
