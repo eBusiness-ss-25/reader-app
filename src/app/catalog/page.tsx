@@ -1,6 +1,6 @@
 "use client";
 import CategoryOverview from "@/components/catalog/CategoryOverview";
-import PersonalOverview from "@/components/catalog/PersonaOverview";
+import PersonalOverview from "@/components/catalog/PersonalOverview";
 import { SearchButton } from "@/components/catalog/SearchButton";
 import Loading from "@/components/common/Loading";
 import {
