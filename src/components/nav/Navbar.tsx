@@ -1,4 +1,4 @@
-import { SearchButton } from "./SearchButton"
+import { SearchButton } from "../common/SearchButton"
 import Image from "next/image";
 
 export function Navbar() {
