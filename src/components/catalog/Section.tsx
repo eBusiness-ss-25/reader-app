@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { HiChevronRight, HiChevronDown } from "react-icons/hi";
 import { cn } from "@/lib/utils";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
@@ -11,7 +11,12 @@ type Section = {
   variant?: "horizontal" | "grid";
 };
 
-export function Section({ title, children, className, variant = "horizontal" }: Section) {
+export function Section({
+  title,
+  children,
+  className,
+  variant = "horizontal",
+}: Section) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -26,7 +31,11 @@ export function Section({ title, children, className, variant = "horizontal" }: 
           }
           type="button"
         >
-          {expanded ? <ChevronDown size={20} /> : <ArrowRight size={20} />}
+          {expanded ? (
+            <HiChevronDown size={20} />
+          ) : (
+            <HiChevronRight size={20} />
+          )}
         </button>
       </div>
       {expanded ? (
@@ -43,11 +52,13 @@ export function Section({ title, children, className, variant = "horizontal" }: 
         // Standard: Horizontal scrollable books
         <ScrollArea className="w-full">
           <div className="flex gap-4 min-w-full">
-            {Array.isArray(children) ? children.map((child, index) => (
-              <div key={index} className="w-[calc(50%-0.5rem)] flex-shrink-0">
-                {child}
-              </div>
-            )) : (
+            {Array.isArray(children) ? (
+              children.map((child, index) => (
+                <div key={index} className="w-[calc(50%-0.5rem)] flex-shrink-0">
+                  {child}
+                </div>
+              ))
+            ) : (
               <div className="w-[calc(50%-0.5rem)] flex-shrink-0">
                 {children}
               </div>
