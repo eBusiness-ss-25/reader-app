@@ -41,4 +41,29 @@ export default class BookAPI {
 
     return response.data;
   }
+
+  public async getBooksByAge(age: number): Promise<Book[]> {
+    const token = await this.authApi.getAuthToken();
+    if (!token) throw new Error("User nicht eingeloggt!");
+    const url = `${BookAPI.apiUrl}/book?age=${age}`;
+    const response = await axios.get(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    
+    return response.data as Book[];
+  }
+}
+
+export interface Book {
+  id: string;
+  title: string;
+  author?: string;
+  introduction?: string;
+  publishedAt?: string;
+  numPages?: number;
+  categoryId?: string;
+  minAge?: number;
+  maxAge?: number;
+  createdAt: string;
+  updatedAt: string;
 }
