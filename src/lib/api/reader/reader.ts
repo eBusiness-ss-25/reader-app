@@ -2,9 +2,16 @@ import axios from "axios";
 import AuthAPI from "../auth/auth";
 
 export interface PageData {
-  content: string;
+  id: string;
+  bookId: string;
   pageNumber: number;
-  totalPages: number;
+  content: string;
+}
+
+interface BookWithPages {
+  id: string;
+  numPages: number;
+  BookPages: PageData[];
 }
 
 export default class ReaderAPI {
@@ -16,10 +23,10 @@ export default class ReaderAPI {
   /**
    * Liefert eine einzelne Seite als HTML-String zurück.
    */
-  public async getPage(bookId: string, page: number): Promise<PageData> {
-    const url = `${ReaderAPI.apiUrl}/books/${bookId}/pages/${page}`;
+  public async getBookWithPages(bookId: string): Promise<BookWithPages> {
+    const url = `${ReaderAPI.apiUrl}/book/${bookId}?relations=BookPages`;
     const token = await this.authApi.getAuthToken();
-    const resp = await axios.get<PageData>(url, {
+    const resp = await axios.get<BookWithPages>(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return resp.data;

@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { X } from "lucide-react";
 import ReaderAPI, { PageData } from "@/lib/api/reader/reader";
@@ -9,72 +10,43 @@ const readerApi = new ReaderAPI();
 
 interface ReaderProps {
   bookId: string;
-  initialPage?: number;
   onClose?: () => void;
   onToggle?: (checked: boolean) => void;
 }
 
 export const Reader: React.FC<ReaderProps> = ({
   bookId,
-  initialPage = 1,
   onClose,
   onToggle,
 }) => {
   const [pages, setPages] = useState<PageData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(initialPage);
-  const [totalPages, setTotalPages] = useState<number | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [toggleOn, setToggleOn] = useState(false);
 
-  const loadPage = useCallback(
-    async (page: number) => {
-      if (totalPages !== null && page > totalPages) return;
+  useEffect(() => {
+    const loadAll = async () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await readerApi.getPage(bookId, page);
-        setPages((prev) => {
-          if (prev.some((p) => p.pageNumber === data.pageNumber)) return prev;
-          return [...prev, data];
-        });
-        setTotalPages(data.totalPages);
+        const book = await readerApi.getBookWithPages(bookId);
+        const sorted = book.BookPages.slice().sort(
+          (a, b) => a.pageNumber - b.pageNumber
+        );
+        setPages(sorted);
       } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : String(err);
-        setError(message);
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(msg);
       } finally {
         setLoading(false);
       }
-    },
-    [bookId, totalPages]
-  );
-
-  useEffect(() => {
-    setPages([]);
-    setCurrentPage(initialPage);
-    setTotalPages(null);
-    loadPage(initialPage);
-  }, [bookId, initialPage, loadPage]);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const onScroll = () => {
-      if (loading) return;
-      if (totalPages !== null && currentPage >= totalPages) return;
-      if (el.scrollTop + el.clientHeight >= el.scrollHeight - 100) {
-        const next = currentPage + 1;
-        setCurrentPage(next);
-        loadPage(next);
-      }
     };
-    el.addEventListener("scroll", onScroll);
-    return () => el.removeEventListener("scroll", onScroll);
-  }, [loading, currentPage, totalPages, loadPage]);
+
+    loadAll();
+  }, [bookId]);
 
   return (
-    <Card className="relative w-full max-w-md h-[600px] mx-auto rounded-2xl overflow-hidden bg-gradient-to-b from-white to-yellow-50 shadow-lg">
+    <Card className="relative w-full h-full rounded-none flex flex-col overflow-hidden bg-gradient-to-b from-white to-yellow-50 shadow-lg">
       {/* Header */}
       <div className="absolute top-4 left-4 z-10">
         <Switch
@@ -96,18 +68,20 @@ export const Reader: React.FC<ReaderProps> = ({
       )}
 
       {/* Content */}
-      <CardContent className="relative flex-1 p-0">
+      <CardContent className="relative flex-1 p-0 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {error && <div className="p-4 text-red-600">{error}</div>}
-        <ScrollArea ref={scrollRef} className="h-full w-full p-6">
-          {pages.map((pg) => (
-            <div
-              key={pg.pageNumber}
-              className="prose max-w-none text-gray-800 mb-8"
-              dangerouslySetInnerHTML={{ __html: pg.content }}
-            />
-          ))}
-          {loading && <div className="py-2 text-center">Lade mehr …</div>}
-        </ScrollArea>
+        {loading && <div className="p-4 text-center">Lade Buch …</div>}
+        {!loading && (
+          <div className="flex-1 overflow-auto p-6">
+            {pages.map((pg) => (
+              <div
+                key={pg.id}
+                className="prose max-w-none text-gray-800 mb-8"
+                dangerouslySetInnerHTML={{ __html: pg.content }}
+              />
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
