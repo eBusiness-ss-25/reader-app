@@ -18,16 +18,24 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-# Production image with Node.js and serve
+# Production image - run Next.js server
 FROM base AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Install serve globally
-RUN npm install -g serve
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Copy the static export from the builder stage
-COPY --from=builder /app/out ./out
+# Copy built application
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 3000
-CMD ["serve", "-s", "out", "-l", "3000"]
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["node", "server.js"]

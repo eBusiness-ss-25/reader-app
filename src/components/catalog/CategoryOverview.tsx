@@ -38,12 +38,12 @@ export default function CategoryOverview() {
   }, [loading, setComponentLoading]);
 
   return (
-    <div className="space-y-8">
+    <div className="w-full max-w-none space-y-8">
       {loading ? (
         <div className="text-sm text-muted-foreground">Loading…</div>
       ) : (
         categories.map((category) => (
-          <Section key={category.id} title={category.name}>
+          <Section key={category.id} title={category.name} className="w-full">
             {category.Books && category.Books.length > 0 ? (
               category.Books.map((book) => (
                 <BookCard
@@ -55,7 +55,7 @@ export default function CategoryOverview() {
                 />
               ))
             ) : (
-              <div className="col-span-2 text-sm text-muted-foreground">
+              <div className="col-span-full text-sm text-muted-foreground">
                 No books in this category yet.
               </div>
             )}
