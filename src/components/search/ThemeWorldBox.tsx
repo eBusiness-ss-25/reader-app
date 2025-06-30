@@ -3,6 +3,7 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import CategoryAPI, { Category } from "@/lib/api/category/category";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function ThemeWorldBox() {
@@ -35,15 +36,17 @@ export default function ThemeWorldBox() {
       <h2 className="text-2xl font-light">Welche Themenwelt?</h2>
       <div className="gap-4 grid grid-cols-3">
         {categories.map((category) => (
-          <AspectRatio key={category.id} ratio={1 / 1} className="bg-muted rounded-3xl">
-            <Button 
-              variant="outline" 
-              className="w-full h-full text-8xl bg-primary-muted"
-              onClick={() => console.log(`Selected category: ${category.name}`)}
-            >
-              {category.icon || "❓"}
-            </Button>
-          </AspectRatio>
+          <Link key={category.id} href={`/search/category/${category.id}`} className="block">
+            <AspectRatio ratio={1 / 1} className="bg-muted rounded-3xl">
+              <Button 
+                variant="outline" 
+                className="w-full h-full text-8xl bg-primary-muted"
+                onClick={() => console.log(`Selected category: ${category.name}`)}
+              >
+                {category.icon || "❓"}
+              </Button>
+            </AspectRatio>
+          </Link>
         ))}
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import AuthAPI from "../auth/auth";
+import { Book } from "../book/book";
 
 export default class CategoryAPI {
     private static apiUrl =
@@ -30,6 +31,7 @@ export default class CategoryAPI {
         return response.data;
     }
 
+    // ahmado1310 warum dieser Name? Ich brauche genau eine Kategorie mit Büchern hier kommen aber entgegen des Namens alle Kategorien zurück. Jetzt muss ich mir einen Namen aus dem Arsch ziehen, der das beschreibt.
     public async getCategoryWithBooks(): Promise<
         {
             id: string;
@@ -50,6 +52,16 @@ export default class CategoryAPI {
         // falls response.data ein Array ist, sonst ggf. response.data.data etc.
         return response.data;
     }
+
+  public async getSingleCategoryWithBooks(id: string): Promise<Category> {
+    const url = `${CategoryAPI.apiUrl}/category/${id}?relations=Books`;
+    const token = await this.authApi.getAuthToken();
+    const response = await axios.get(url, {
+      headers: {Authorization: `Bearer ${token}`},
+    });
+
+    return response.data as Category;
+  }
 }
 
 export interface Category {
@@ -58,4 +70,5 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
   icon?: string;
+  Books?: Book[];
 }
