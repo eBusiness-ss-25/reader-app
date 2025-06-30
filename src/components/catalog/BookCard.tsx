@@ -5,6 +5,7 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, D
 import { DrawerTrigger } from "../ui/drawer";
 import { Button } from "../ui/button";
 import Image from "next/image"
+import Link from "next/link";
 
 type BookCardProps = {
   id?: string; // Buch-ID für die Detailseite
@@ -82,7 +83,9 @@ export function BookCard({
             {introduction}
           </div>
           <DrawerFooter>
-            <Button>Lesen</Button>
+            <Button>
+              <Link href="">Lesen</Link>
+            </Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
