@@ -42,7 +42,17 @@ export function Section({ title, children, className, variant = "horizontal" }: 
       ) : (
         // Standard: Horizontal scrollable books
         <ScrollArea className="w-full">
-          <div className="flex gap-4 min-w-full">{children}</div>
+          <div className="flex gap-4 min-w-full">
+            {Array.isArray(children) ? children.map((child, index) => (
+              <div key={index} className="w-[calc(50%-0.5rem)] flex-shrink-0">
+                {child}
+              </div>
+            )) : (
+              <div className="w-[calc(50%-0.5rem)] flex-shrink-0">
+                {children}
+              </div>
+            )}
+          </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       )}
