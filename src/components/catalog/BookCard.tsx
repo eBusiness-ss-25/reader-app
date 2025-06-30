@@ -1,8 +1,10 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer";
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { DrawerTrigger } from "../ui/drawer";
+import { Button } from "../ui/button";
+import Image from "next/image"
 
 type BookCardProps = {
   id?: string; // Buch-ID für die Detailseite
@@ -19,6 +21,7 @@ export function BookCard({
   author,
   introduction,
   bookPage,
+  image,
   numPages,
 }: BookCardProps) {
   const showProgress =
@@ -57,9 +60,29 @@ export function BookCard({
           </AspectRatio>
         </DrawerTrigger>
         <DrawerContent className="h-full">
-          <DrawerTitle>
-            {title}
-          </DrawerTitle>
+          <DrawerHeader>
+            <DrawerTitle>
+              {title}   
+            </DrawerTitle>
+            <DrawerDescription>
+              {author}  
+            </DrawerDescription>
+          </DrawerHeader>
+          {image && 
+          
+            <div className="max-w-1/2">
+              <AspectRatio ratio={3 / 4} className="w-full">
+                <Image src={image} alt="test" fill className="h-full w-full"/>
+              </AspectRatio>
+            </div>
+          
+          }
+          <div>
+            {introduction}
+          </div>
+          <DrawerFooter>
+            <Button>Lesen</Button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </div>
