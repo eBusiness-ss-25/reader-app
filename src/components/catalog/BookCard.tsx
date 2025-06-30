@@ -1,6 +1,5 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
@@ -15,7 +14,6 @@ type BookCardProps = {
 };
 
 export function BookCard({
-  id,
   title,
   author,
   introduction,
@@ -23,36 +21,9 @@ export function BookCard({
   bookPage,
   numPages,
 }: BookCardProps) {
-  const [showInfo, setShowInfo] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const showProgress =
     typeof bookPage === "number" && typeof numPages === "number";
   const progress = showProgress && numPages ? (bookPage! / numPages) * 100 : 0;
-
-  // Overlay schließen, wenn außerhalb geklickt wird
-  useEffect(() => {
-    if (!showInfo) return;
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      if (cardRef.current && !cardRef.current.contains(event.target as Node)) {
-        setShowInfo(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, [showInfo]);
-
-  const handleClick = () => {
-    if (!showInfo) {
-      setShowInfo(true);
-    } else {
-      router.push(`/book/${id}`);
-    }
-  };
 
   return (
     <div className="w-full">
