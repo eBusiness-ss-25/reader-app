@@ -10,10 +10,12 @@ function CatalogContent() {
   return (
     <>
       {isLoading && <Loading />}
-      <div className="flex min-h-screen flex-col items-center px-12 py-8 gap-4">
-        <SearchButton />
-        <PersonalBooksSection />
-        <CategoryOverview />
+      <div className="w-full min-h-screen px-4 sm:px-6 lg:px-8 py-8 gap-4">
+        <div className="w-full max-w-7xl mx-auto space-y-6">
+          <SearchButton />
+          <PersonalBooksSection />
+          <CategoryOverview />
+        </div>
       </div>
     </>
   );

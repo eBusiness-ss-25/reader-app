@@ -42,3 +42,15 @@ export default class BookAPI {
     return response.data;
   }
 }
+
+export interface Book {
+  id: string;
+  title: string;
+  author?: string;
+  introduction?: string;
+  publishedAt?: string;
+  numPages?: number;
+  categoryId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
