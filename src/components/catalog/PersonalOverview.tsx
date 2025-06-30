@@ -1,11 +1,7 @@
-// components/catalog/PersonalBooksSection.tsx
-
-"use client";
-
 import { useEffect, useState } from "react";
 import BookAPI from "@/lib/api/book/book";
-import { CatalogSection } from "@/components/catalog/CatalogSection";
-import { UserBookCard } from "@/components/catalog/UserBookCard";
+import { Section } from "@/components/catalog/Section";
+import { BookCard } from "@/components/catalog/BookCard";
 import { useCatalogLoading } from "@/lib/hooks/useCatalogLoading";
 
 // Types
@@ -49,14 +45,16 @@ export default function PersonalBooksSection() {
   }, [loading, setComponentLoading]);
 
   return (
-    <CatalogSection title="Your Books">
+    <Section title="Your Books" variant="grid">
       {loading ? (
         <div className="col-span-2 text-sm text-muted-foreground">Loading…</div>
       ) : userBooks.length > 0 ? (
         userBooks.map((entry) => (
-          <UserBookCard
+          <BookCard
+            id={entry.book.id}
             key={entry.book.id}
             title={entry.book.title}
+            image={"/example.png"} // Placeholder image, replace with actual image URL if available
             author={entry.book.author}
             introduction={entry.book.introduction}
             bookPage={entry.bookPage}
@@ -68,6 +66,6 @@ export default function PersonalBooksSection() {
           You don&apos;t have any books yet!
         </div>
       )}
-    </CatalogSection>
+    </Section>
   );
 }

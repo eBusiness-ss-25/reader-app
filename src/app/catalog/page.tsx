@@ -1,8 +1,11 @@
 "use client";
 import CategoryOverview from "@/components/catalog/CategoryOverview";
-import PersonalBooksSection from "@/components/catalog/PersonalBooksSection";
+import PersonalOverview from "@/components/catalog/PersonalOverview";
 import Loading from "@/components/common/Loading";
-import { CatalogLoadingProvider, useCatalogLoading } from "@/lib/hooks/useCatalogLoading";
+import {
+  CatalogLoadingProvider,
+  useCatalogLoading,
+} from "@/lib/hooks/useCatalogLoading";
 import { Navbar } from "@/components/nav/Navbar";
 
 function CatalogContent() {
@@ -10,9 +13,9 @@ function CatalogContent() {
   return (
     <>
       {isLoading && <Loading />}
-      <div className="flex min-h-screen flex-col items-center px-12 py-8 gap-4">
+      <div className="flex min-h-screen flex-col w-full max-w-3xl mx-auto py-8 px-4 sm:px-8 gap-4">
         <Navbar />
-        <PersonalBooksSection />
+        <PersonalOverview />
         <CategoryOverview />
       </div>
     </>
