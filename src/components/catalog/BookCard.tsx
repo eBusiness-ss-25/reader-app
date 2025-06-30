@@ -1,10 +1,9 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
 type BookCardProps = {
-  id: string; // Buch-ID für die Detailseite
+  id?: string; // Buch-ID für die Detailseite
   title: string;
   author?: string;
   introduction?: string;
@@ -17,7 +16,6 @@ export function BookCard({
   title,
   author,
   introduction,
-  image,
   bookPage,
   numPages,
 }: BookCardProps) {
