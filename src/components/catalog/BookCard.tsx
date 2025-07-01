@@ -1,8 +1,18 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Drawer, DrawerContent, DrawerTitle } from "../ui/drawer";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "../ui/drawer";
 import { DrawerTrigger } from "../ui/drawer";
+import { Button } from "../ui/button";
+import Image from "next/image";
+import Link from "next/link";
 
 type BookCardProps = {
   id?: string; // Buch-ID für die Detailseite
@@ -18,8 +28,8 @@ export function BookCard({
   title,
   author,
   introduction,
-  image,
   bookPage,
+  image,
   numPages,
 }: BookCardProps) {
   const showProgress =
@@ -82,7 +92,31 @@ export function BookCard({
           </AspectRatio>
         </DrawerTrigger>
         <DrawerContent className="h-full">
-          <DrawerTitle>{title}</DrawerTitle>
+          {image && (
+            <div className="flex justify-center px-4 mt-4">
+              <div className="w-2/3 max-w-xs">
+                <AspectRatio ratio={3 / 4} className="w-full">
+                  <Image
+                    src={image}
+                    alt={title}
+                    fill
+                    className="h-full w-full object-cover rounded-md"
+                  />
+                </AspectRatio>
+              </div>
+            </div>
+          )}
+          <DrawerHeader>
+            <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription>{author}</DrawerDescription>
+          </DrawerHeader>
+          <b className="px-8 py-4">Description</b>
+          <div className="px-8">{introduction}</div>
+          <DrawerFooter>
+            <Button>
+              <Link href="">Lesen</Link>
+            </Button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </div>
