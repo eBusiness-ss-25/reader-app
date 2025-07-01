@@ -59,6 +59,7 @@ export default function PersonalBooksSection() {
             introduction={entry.book.introduction}
             bookPage={entry.bookPage}
             numPages={entry.book.numPages ?? 0}
+            userId={entry.id}
           />
         ))
       ) : (
