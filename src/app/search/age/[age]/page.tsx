@@ -6,6 +6,7 @@ import CloseButton from "@/components/common/CloseButton";
 import Loading from "@/components/common/Loading";
 import BookAPI, { Book } from "@/lib/api/book/book";
 import { use, useState, useEffect } from "react";
+import Image from "next/image";
 
 interface AgeSearchPageProps {
   params: Promise<{
@@ -48,6 +49,7 @@ export default function AgeSearchPage({ params }: AgeSearchPageProps) {
     <div className="p-8">
       <div className="w-full flex justify-between mb-4">
         <BackButton url="/search" />
+        <Image src="/Reeda_Logo_v2.png" width={200} height={160} alt="Logo" />
         <CloseButton url="/catalog" />
       </div>
       <h1 className="text-3xl font-bold mb-4">Bücher für das Alter { icon }</h1>
