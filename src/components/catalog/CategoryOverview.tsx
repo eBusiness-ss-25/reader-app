@@ -11,6 +11,7 @@ type Book = {
   title: string;
   author?: string;
   introduction?: string;
+  bookCoverId?: string;
   // additional fields if needed
 };
 
@@ -52,6 +53,7 @@ export default function CategoryOverview() {
                   title={book.title}
                   author={book.author}
                   introduction={book.introduction}
+                  bookCoverId={book.bookCoverId}
                 />
               ))
             ) : (

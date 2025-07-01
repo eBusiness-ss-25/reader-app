@@ -24,6 +24,7 @@ export default class BookAPI {
         introduction?: string;
         publishedAt?: string;
         categoryId?: string;
+        bookCoverId?: string;
         [key: string]: unknown;
       };
     }[]
@@ -49,8 +50,12 @@ export default class BookAPI {
     const response = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    
+
     return response.data as Book[];
+  }
+
+  public static getBookCoverUrlById(bookCoverId: string): string | undefined {
+    return `${BookAPI.apiUrl}/storage/${bookCoverId}`;
   }
 }
 
@@ -64,6 +69,7 @@ export interface Book {
   categoryId?: string;
   minAge?: number;
   maxAge?: number;
+  bookCoverId?: string;
   createdAt: string;
   updatedAt: string;
 }
