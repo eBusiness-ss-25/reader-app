@@ -20,7 +20,7 @@ export function Section({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <section className={cn("mb-8", className)}>
+    <section className={cn("mb-6 relative z-0 clear-both", className)}>
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-lg font-bold">{title}</h2>
         <button
@@ -39,27 +39,27 @@ export function Section({
         </button>
       </div>
       {expanded ? (
-        // Expanded: Books in grid layout, 2 columns on mobile
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        // Expanded: Books in grid layout, responsive sizing
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {children}
         </div>
       ) : variant === "grid" ? (
-        // Grid: 2 columns on mobile, more on larger screens
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        // Grid: 2 columns on mobile, 3 on tablet portrait, 6 on tablet landscape
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {children}
         </div>
       ) : (
-        // Standard: Horizontal scrollable books
+        // Standard: Horizontal scrollable books with fixed min/max sizes
         <ScrollArea className="w-full">
           <div className="flex gap-4 min-w-full">
             {Array.isArray(children) ? (
               children.map((child, index) => (
-                <div key={index} className="w-[calc(50%-0.5rem)] flex-shrink-0">
+                <div key={index} className="min-w-[140px] max-w-[180px] flex-shrink-0">
                   {child}
                 </div>
               ))
             ) : (
-              <div className="w-[calc(50%-0.5rem)] flex-shrink-0">
+              <div className="min-w-[140px] max-w-[180px] flex-shrink-0">
                 {children}
               </div>
             )}

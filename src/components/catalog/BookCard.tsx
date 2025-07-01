@@ -44,7 +44,7 @@ export function BookCard({
     : undefined;
 
   return (
-    <div className="w-full">
+    <div className="w-full min-h-[210px] max-h-[270px]">
       <Drawer>
         <DrawerTrigger asChild>
           <AspectRatio ratio={2 / 3} className="w-full">
