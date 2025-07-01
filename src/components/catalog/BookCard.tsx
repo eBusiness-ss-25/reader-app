@@ -8,7 +8,7 @@ import Image from "next/image"
 import Link from "next/link";
 
 type BookCardProps = {
-  id?: string; // Buch-ID für die Detailseite
+  id?: string;
   title: string;
   author?: string;
   introduction?: string;
@@ -33,7 +33,7 @@ export function BookCard({
     <div className="w-full">
       <Drawer>
         <DrawerTrigger asChild>
-          <AspectRatio ratio={3 / 4} className="w-full">
+          <AspectRatio ratio={2 / 3} className="w-full">
             <Card className="h-full w-full bg-gradient-to-br from-purple-400 to-pink-400 shadow-md text-white">
               <CardContent className="p-4 flex flex-col justify-between h-full">
                 <div>
@@ -64,7 +64,7 @@ export function BookCard({
           {image && 
             <div className="flex justify-center px-4 mt-4">
               <div className="w-2/3 max-w-xs">
-                <AspectRatio ratio={3 / 4} className="w-full">
+                <AspectRatio ratio={2 / 3} className="w-full">
                   <Image src={image} alt={title} fill className="h-full w-full object-cover rounded-md"/>
                 </AspectRatio>
               </div>
