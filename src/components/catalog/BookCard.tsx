@@ -15,6 +15,7 @@ type BookCardProps = {
   image?: string;
   bookPage?: number;
   numPages?: number;
+  userId?: string
 };
 
 export function BookCard({
@@ -24,6 +25,7 @@ export function BookCard({
   bookPage,
   image,
   numPages,
+  userId,
 }: BookCardProps) {
   const showProgress =
     typeof bookPage === "number" && typeof numPages === "number";
@@ -83,7 +85,7 @@ export function BookCard({
             {introduction}
           </div>
           <DrawerFooter>
-            <Button>
+            <Button disabled={!userId}>
               <Link href="">Lesen</Link>
             </Button>
           </DrawerFooter>
