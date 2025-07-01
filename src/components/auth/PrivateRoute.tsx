@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
@@ -9,14 +9,19 @@ export default function PrivateRoute({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (!Cookies.get("auth_token")) {
+    const token = Cookies.get("auth_token");
+    if (!token) {
       router.replace("/");
+    } else {
+      setChecked(true);
     }
   }, [router]);
 
-  if (!Cookies.get("auth_token")) {
+  if (!checked) {
+    // Optional: Ladeanzeige oder null
     return null;
   }
 
