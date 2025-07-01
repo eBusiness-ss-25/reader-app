@@ -18,6 +18,7 @@ export function BookCard({
   title,
   author,
   introduction,
+  image,
   bookPage,
   numPages,
 }: BookCardProps) {
@@ -30,30 +31,54 @@ export function BookCard({
       <Drawer>
         <DrawerTrigger asChild>
           <AspectRatio ratio={3 / 4} className="w-full">
-            <Card className="h-full w-full bg-gradient-to-br from-purple-400 to-pink-400 shadow-md text-white">
-              <CardContent className="p-4 flex flex-col justify-between h-full">
-                <div>
-                  <div className="font-semibold text-base mb-1">{title}</div>
-                  {author && (
-                    <div className="text-xs text-white/80 mb-2">{author}</div>
-                  )}
-                  {introduction && (
-                    <div className="text-xs text-white/70 line-clamp-3">
-                      {introduction}
-                    </div>
-                  )}
-                </div>
-                {/* Space for progressbar, actions, etc. */}
+            {image ? (
+              <div>
+                <img
+                  src={image}
+                  alt={title}
+                  className="w-full h-auto rounded"
+                />
                 {showProgress && (
-                  <div className="mt-3">
+                  <div className="absolute bottom-0 left-0 w-full px-2 pb-2">
                     <Progress value={progress} className="h-2 bg-white/30" />
-                    <div className="text-xs mt-1">
+                    <div className="text-xs mt-1 text-white drop-shadow text-center">
                       {Math.round(progress)}% gelesen
                     </div>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            ) : (
+              <Card className="h-full w-full bg-gradient-to-br from-purple-400 to-pink-400 shadow-md text-white">
+                <CardContent className="p-4 flex flex-col justify-between h-full">
+                  <>
+                    {title && (
+                      <div className="font-semibold text-base mb-1">
+                        {title}
+                      </div>
+                    )}
+                    {author && (
+                      <div className="text-xs text-white/80 mb-2">{author}</div>
+                    )}
+                    {introduction && (
+                      <div className="text-xs text-white/70 line-clamp-3">
+                        {introduction}
+                      </div>
+                    )}
+                    {showProgress && (
+                      <div className="mt-3">
+                        <Progress
+                          value={progress}
+                          className="h-2 bg-white/30"
+                        />
+                        <div className="text-xs mt-1">
+                          {Math.round(progress)}% gelesen
+                        </div>
+                      </div>
+                    )}
+                  </>
+                </CardContent>
+              </Card>
+            )}
           </AspectRatio>
         </DrawerTrigger>
         <DrawerContent className="h-full">
