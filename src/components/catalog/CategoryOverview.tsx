@@ -38,7 +38,7 @@ export default function CategoryOverview({
   }
 
   return (
-    <div className="w-full max-w-none space-y-8">
+    <div className="w-full max-w-none space-y-6 mt-4">
       {cats.map((cat) => (
         <Section key={cat.id} title={cat.name} className="w-full">
           {cat.Books && cat.Books.length > 0 ? (
