@@ -42,6 +42,9 @@ export default function AuthPage() {
           <Register />
         </TabsContent>
       </Tabs>
+      <div className="mt-auto">
+        <Image src="/Reeda_Logo_v2.png" width={300} height={300} alt="Logo" />
+      </div>
     </div>
   );
 }
