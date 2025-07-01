@@ -1,6 +1,6 @@
 "use client";
 
-import Reader from "@/components/reader/reader";
+import { Reader } from "@/components/reader/reader";
 import { useParams } from "next/navigation";
 
 export default function ReaderPage() {
@@ -9,8 +9,7 @@ export default function ReaderPage() {
   return (
     <div
       style={{
-        position: "fixed",
-        inset: 0,
+        minHeight: "100vh",
         background: "#fff",
         display: "flex",
         alignItems: "center",

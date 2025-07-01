@@ -111,7 +111,7 @@ export function BookCard({
           <div className="px-8">{introduction}</div>
           <DrawerFooter>
             <Button disabled={!userId}>
-              <Link href="">Lesen</Link>
+              <Link href={`/reader/${id}`}>Lesen</Link>
             </Button>
           </DrawerFooter>
         </DrawerContent>

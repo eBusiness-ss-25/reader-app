@@ -6,6 +6,7 @@ export interface PageData {
   bookId: string;
   pageNumber: number;
   content: string;
+  pageVideoId: string;
 }
 
 interface BookWithPages {
@@ -30,5 +31,15 @@ export default class ReaderAPI {
       headers: { Authorization: `Bearer ${token}` },
     });
     return resp.data;
+  }
+
+  public async getVideoIdByPageId(id: string) {
+    const bookPageUrl = `${ReaderAPI.apiUrl}/book-page/${id}`;
+    const token = await this.authApi.getAuthToken();
+    const bookPageResp = await axios.get<PageData>(bookPageUrl, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const storageId = bookPageResp.data.pageVideoId;
+    return `${ReaderAPI.apiUrl}/storage/${storageId}`;
   }
 }
