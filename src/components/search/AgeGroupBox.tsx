@@ -9,17 +9,17 @@ export default function AgeGroupBox() {
       <div className="gap-4 grid grid-cols-3">
         <AspectRatio ratio={1 / 1} className="bg-muted rounded-3xl">
           <Link href="/search/age/0">
-            <Button variant="outline" className="w-full h-full text-8xl bg-primary-muted">👶🏻</Button>
+            <Button variant="outline" className="w-full h-full text-6xl bg-primary-muted">👶🏻</Button>
           </Link>
         </AspectRatio>
         <AspectRatio ratio={1 / 1} className="bg-muted rounded-3xl">
           <Link href="/search/age/4">
-            <Button variant="outline" className="w-full h-full text-8xl bg-primary-muted">🛝</Button>
+            <Button variant="outline" className="w-full h-full text-6xl bg-primary-muted">🛝</Button>
           </Link>
         </AspectRatio>
         <AspectRatio ratio={1 / 1} className="bg-muted rounded-3xl">
           <Link href="/search/age/6">
-            <Button variant="outline" className="w-full h-full text-8xl bg-primary-muted">🎓</Button>
+            <Button variant="outline" className="w-full h-full text-6xl bg-primary-muted">🎓</Button>
           </Link>
         </AspectRatio>
       </div>

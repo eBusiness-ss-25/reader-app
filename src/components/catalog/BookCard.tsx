@@ -16,13 +16,14 @@ import Link from "next/link";
 import BookAPI from "@/lib/api/book/book";
 
 type BookCardProps = {
-  id?: string; // Buch-ID für die Detailseite
+  id?: string;
   title: string;
   author?: string;
   introduction?: string;
   bookCoverId?: string;
   bookPage?: number;
   numPages?: number;
+  userId?: string;
 };
 
 export function BookCard({
@@ -32,6 +33,7 @@ export function BookCard({
   bookPage,
   bookCoverId,
   numPages,
+  userId,
 }: BookCardProps) {
   const showProgress =
     typeof bookPage === "number" && typeof numPages === "number";
@@ -107,7 +109,7 @@ export function BookCard({
           <b className="px-8 py-4">Description</b>
           <div className="px-8">{introduction}</div>
           <DrawerFooter>
-            <Button>
+            <Button disabled={!userId}>
               <Link href="">Lesen</Link>
             </Button>
           </DrawerFooter>

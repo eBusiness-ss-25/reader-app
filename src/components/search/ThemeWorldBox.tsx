@@ -40,7 +40,7 @@ export default function ThemeWorldBox() {
             <AspectRatio ratio={1 / 1} className="bg-muted rounded-3xl">
               <Button 
                 variant="outline" 
-                className="w-full h-full text-8xl bg-primary-muted"
+                className="w-full h-full text-6xl bg-primary-muted"
                 onClick={() => console.log(`Selected category: ${category.name}`)}
               >
                 {category.icon || "❓"}
