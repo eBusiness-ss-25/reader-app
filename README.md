@@ -18,10 +18,42 @@ The catalog page presents a personal overview followed by several book categorie
 
 The search page lets readers look for books in three different ways. A free-text search box filters books by title. Age group buttons provide shortcuts for common reading ages. Theme world buttons show all available categories retrieved from the backend API. Search results are displayed as cards, each linking back to the catalog for easy exploration.
 
-## Requirements
+## Quick Start Guide
 
-- Node.js 18 or newer
-- NPM (or any compatible package manager)
+### System Requirements
+
+- Node.js 22
+- NPM or any compatible package manager
+- A free TCP port `3000`
+
+### Initial Setup
+
+```bash
+npm install
+cp .env.example .env   # or run ./agents/scripts/setup.sh
+```
+
+Edit `.env` and set the following variables:
+
+- `NEXT_PUBLIC_BOOK_API` – base URL of the backend API
+- `NEXT_PUBLIC_AUTH_COOKIE_NAME` – cookie name used to store the auth token
+
+### Start the Development Server
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:3000` in your browser.
+
+### Docker Example
+
+Build the Docker image and start the container on port 3000:
+
+```bash
+docker build -t reader-app .
+docker run -p 3000:3000 --env-file .env reader-app
+```
 
 ## Getting Started
 
@@ -64,7 +96,7 @@ and run the container with:
 
 ```bash
 docker build -t reader-app .
-docker run -p 3000:3000 reader-app
+docker run -p 3000:3000 --env-file .env reader-app
 ```
 
 ## Directory Overview
