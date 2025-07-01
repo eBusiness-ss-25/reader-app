@@ -39,27 +39,27 @@ export function Section({
         </button>
       </div>
       {expanded ? (
-        // Expanded: Books in grid layout, responsive sizing
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        // Expanded: Books in grid layout with consistent spacing and no overlap
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 auto-rows-max">
           {children}
         </div>
       ) : variant === "grid" ? (
-        // Grid: 2 columns on mobile, 3 on tablet portrait, 6 on tablet landscape
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        // Grid: Consistent grid layout with proper spacing
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 auto-rows-max">
           {children}
         </div>
       ) : (
-        // Standard: Horizontal scrollable books with fixed min/max sizes
+        // Standard: Horizontal scrollable books with consistent spacing
         <ScrollArea className="w-full">
-          <div className="flex gap-4 min-w-full">
+          <div className="flex gap-4 min-w-full pb-2">
             {Array.isArray(children) ? (
               children.map((child, index) => (
-                <div key={index} className="min-w-[140px] max-w-[180px] flex-shrink-0">
+                <div key={index} className="w-[150px] max-w-[150px] flex-shrink-0">
                   {child}
                 </div>
               ))
             ) : (
-              <div className="min-w-[140px] max-w-[180px] flex-shrink-0">
+              <div className="w-[150px] max-w-[150px] flex-shrink-0">
                 {children}
               </div>
             )}
