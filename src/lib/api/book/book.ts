@@ -57,6 +57,20 @@ export default class BookAPI {
   public static getBookCoverUrlById(bookCoverId: string): string | undefined {
     return `${BookAPI.apiUrl}/storage/${bookCoverId}`;
   }
+
+  public async searchBooksByTitle(
+    searchString: string
+  ): Promise<Book[]> {
+    const token = await this.authApi.getAuthToken();
+    if (!token) throw new Error("User nicht eingeloggt!");
+
+    const url = `${BookAPI.apiUrl}/book?search=${encodeURIComponent(searchString)}`;
+    const response = await axios.get(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return response.data as Book[];
+  }
 }
 
 export interface Book {
