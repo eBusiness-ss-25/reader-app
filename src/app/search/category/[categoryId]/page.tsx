@@ -3,7 +3,6 @@
 import { use, useState, useEffect } from "react";
 import CategoryAPI, { Category } from "../../../../lib/api/category/category";
 import Loading from "@/components/common/Loading";
-import CategoryOverview from "@/components/catalog/CategoryOverview";
 import BackButton from "@/components/common/BackButton";
 import CloseButton from "@/components/common/CloseButton";
 import Image from "next/image";
