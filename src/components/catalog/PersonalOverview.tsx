@@ -55,7 +55,7 @@ export default function PersonalBooksSection() {
             id={entry.book.id}
             key={entry.book.id}
             title={entry.book.title}
-            bookCoverId={entry.book.bookCoverId} // Placeholder image, replace with actual image URL if available
+            bookCoverId={entry.book.bookCoverId}
             author={entry.book.author}
             introduction={entry.book.introduction}
             bookPage={entry.bookPage}
