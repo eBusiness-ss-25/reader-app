@@ -12,8 +12,7 @@ export function Reader({ bookId }: { bookId: string }) {
   const [currentPageIdx, setCurrentPageIdx] = useState(0);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasPlayed, setHasPlayed] = useState(false);
-  const [soundOn, setSoundOn] = useState(true);
+  const [soundOn, setSoundOn] = useState(false);
   const [maxVisitedPageIdx, setMaxVisitedPageIdx] = useState(0);
 
   const currentPage = pages[currentPageIdx];
@@ -53,10 +52,6 @@ export function Reader({ bookId }: { bookId: string }) {
   const goNext = () => {
     if (currentPageIdx < pages.length - 1) setCurrentPageIdx((idx) => idx + 1);
   };
-
-  useEffect(() => {
-    setHasPlayed(false);
-  }, [videoUrl]);
 
   // update user book progress
   useEffect(() => {
@@ -113,18 +108,11 @@ export function Reader({ bookId }: { bookId: string }) {
                 height={250}
                 preload="auto"
                 autoPlay
-                muted={!soundOn || hasPlayed}
+                muted={!soundOn}
                 playsInline
                 controlsList="nodownload nofullscreen noremoteplayback"
                 controls={false}
                 className="rounded-lg shadow-md w-full max-w-xl aspect-video"
-                onEnded={() => {
-                  setHasPlayed(true);
-                  if (videoRef.current) {
-                    videoRef.current.muted = true;
-                    videoRef.current.play();
-                  }
-                }}
               />
             </div>
           )}
