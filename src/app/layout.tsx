@@ -8,7 +8,7 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 const comicNeue = Comic_Neue({
   variable: "--font-comic",
   subsets: ["latin"],
-  weight: ["300", "400", "700"],
+  weight: ["400", "400", "700"],
   display: "swap",
 });
 

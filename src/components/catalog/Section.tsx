@@ -9,6 +9,7 @@ type Section = {
   className?: string;
   onTitleClick?: () => void;
   variant?: "horizontal" | "grid";
+  hideButton?: boolean;
 };
 
 export function Section({
@@ -16,6 +17,7 @@ export function Section({
   children,
   className,
   variant = "horizontal",
+  hideButton,
 }: Section) {
   const [expanded, setExpanded] = useState(false);
 
@@ -23,20 +25,22 @@ export function Section({
     <section className={cn("mb-6 relative z-0 clear-both", className)}>
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-lg font-bold">{title}</h2>
-        <button
-          className="flex items-center text-muted-foreground hover:text-primary transition"
-          onClick={() => setExpanded((prev) => !prev)}
-          aria-label={
-            expanded ? `Collapse section` : `Show all books in ${title}`
-          }
-          type="button"
-        >
+        {!hideButton && 
+          <button
+            className="flex items-center text-muted-foreground hover:text-primary transition"
+            onClick={() => setExpanded((prev) => !prev)}
+            aria-label={
+              expanded ? `Collapse section` : `Show all books in ${title}`
+            }
+            type="button"
+          >
           {expanded ? (
             <HiChevronDown size={20} />
           ) : (
             <HiChevronRight size={20} />
           )}
         </button>
+        }
       </div>
       {expanded ? (
         // Expanded: Books in grid layout with consistent spacing and no overlap

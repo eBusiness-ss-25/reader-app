@@ -46,7 +46,7 @@ export default function PersonalBooksSection() {
   }, [loading, setComponentLoading]);
 
   return (
-    <Section title="Deine Bücher" variant="grid" className="pt-10">
+    <Section title="Deine Bücher" variant="grid" className="pt-16" hideButton={true}>
       {loading ? (
         <div className="col-span-2 text-sm text-muted-foreground">Loading…</div>
       ) : userBooks.length > 0 ? (
