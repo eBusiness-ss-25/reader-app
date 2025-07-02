@@ -3,10 +3,10 @@
 import { use, useState, useEffect } from "react";
 import CategoryAPI, { Category } from "../../../../lib/api/category/category";
 import Loading from "@/components/common/Loading";
-import { BookCard } from "@/components/catalog/BookCard";
 import BackButton from "@/components/common/BackButton";
 import CloseButton from "@/components/common/CloseButton";
 import Image from "next/image";
+import { BookCard } from "@/components/catalog/BookCard";
 
 interface CategorySearchProps {
   params: Promise<{
@@ -42,7 +42,7 @@ export default function CategorySearch({ params }: CategorySearchProps) {
     <div className="p-8">
       <div className="w-full flex justify-between mb-4">
         <BackButton url="/search" />
-        <Image src="/Reeda_Logo_v2.png" width={200} height={160} alt="Logo" />
+        <Image src="/reeda-logo.png" width={200} height={160} alt="Logo" />
         <CloseButton url="/catalog" />
       </div>
       <h1 className="text-3xl font-bold mb-4">
@@ -51,7 +51,15 @@ export default function CategorySearch({ params }: CategorySearchProps) {
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {category.Books && category.Books.length > 0 ? (
           category.Books.map((book) => (
-            <BookCard key={book.id} title={book.title} />
+            <BookCard
+              key={book.id}
+              id={book.id}
+              title={book.title}
+              author={book.author}
+              introduction={book.introduction}
+              bookCoverId={book.bookCoverId}
+              numPages={book.numPages}
+            />
           ))
         ) : (
           <p className="text-gray-500">

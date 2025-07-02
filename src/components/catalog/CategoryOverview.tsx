@@ -1,10 +1,5 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import CategoryAPI from "@/lib/api/category/category";
 import { Section } from "@/components/catalog/Section";
-import { BookCard } from "./BookCard";
-import { useCatalogLoading } from "@/lib/hooks/useCatalogLoading";
+import { BookCard } from "@/components/catalog/BookCard";
 
 type Book = {
   id: string;
@@ -12,58 +7,59 @@ type Book = {
   author?: string;
   introduction?: string;
   bookCoverId?: string;
-  // additional fields if needed
+  numPages?: number;
 };
 
 type CategoryWithBooks = {
   id: string;
   name: string;
   Books: Book[];
+  icon?: string;
 };
 
-export default function CategoryOverview() {
-  const [categories, setCategories] = useState<CategoryWithBooks[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { setComponentLoading } = useCatalogLoading();
+interface CategoryOverviewProps {
+  categories?: CategoryWithBooks[];
+  category?: CategoryWithBooks;
+}
 
-  useEffect(() => {
-    const api = new CategoryAPI();
-    api
-      .getCategoryWithBooks()
-      .then(setCategories)
-      .finally(() => setLoading(false));
-  }, []);
+export default function CategoryOverview({
+  categories,
+  category,
+}: CategoryOverviewProps) {
+  // Priorität: Einzelne Kategorie, sonst mehrere
+  const cats = category ? [category] : categories ?? [];
 
-  useEffect(() => {
-    setComponentLoading("categories", loading);
-  }, [loading, setComponentLoading]);
+  if (!cats.length) {
+    return (
+      <div className="text-sm text-muted-foreground">
+        Keine Bücher in dieser Kategorie gefunden.
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full max-w-none space-y-8">
-      {loading ? (
-        <div className="text-sm text-muted-foreground">Loading…</div>
-      ) : (
-        categories.map((category) => (
-          <Section key={category.id} title={category.name} className="w-full">
-            {category.Books && category.Books.length > 0 ? (
-              category.Books.map((book) => (
-                <BookCard
-                  id={book.id}
-                  key={book.id}
-                  title={book.title}
-                  author={book.author}
-                  introduction={book.introduction}
-                  bookCoverId={book.bookCoverId}
-                />
-              ))
-            ) : (
-              <div className="col-span-full text-sm text-muted-foreground">
-                No books in this category yet.
-              </div>
-            )}
-          </Section>
-        ))
-      )}
+    <div className="w-full max-w-none space-y-6 mt-4">
+      {cats.map((cat) => (
+        <Section key={cat.id} title={cat.name} className="w-full">
+          {cat.Books && cat.Books.length > 0 ? (
+            cat.Books.map((book) => (
+              <BookCard
+                key={book.id}
+                id={book.id}
+                title={book.title}
+                author={book.author}
+                introduction={book.introduction}
+                bookCoverId={book.bookCoverId}
+                numPages={book.numPages}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-sm text-muted-foreground">
+              Keine Bücher in dieser Kategorie gefunden.
+            </div>
+          )}
+        </Section>
+      ))}
     </div>
   );
 }

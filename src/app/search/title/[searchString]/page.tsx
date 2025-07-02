@@ -4,44 +4,40 @@ import { BookCard } from "@/components/catalog/BookCard";
 import BackButton from "@/components/common/BackButton";
 import CloseButton from "@/components/common/CloseButton";
 import Loading from "@/components/common/Loading";
+import AuthAPI from "@/lib/api/auth/auth";
 import BookAPI, { Book } from "@/lib/api/book/book";
 import { use, useState, useEffect } from "react";
 import Image from "next/image";
 
-interface AgeSearchPageProps {
+interface TitleSearchProps {
   params: Promise<{
-    age: number;
+    searchString: string;
   }>;
 }
 
-export default function AgeSearchPage({ params }: AgeSearchPageProps) {
-  const { age } = use(params);
-
-  const icon = age < 4 ? "👶🏻" : age < 6 ? "🛝" : age >= 6 ? "🎓" : "❓";
-
+export default function CategorySearch({ params }: TitleSearchProps) {
+  const { searchString } = use(params);
+  const decodedSearch = decodeURIComponent(searchString);
   const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [pending, setPending] = useState<boolean>(true);
+
+  const authAPI = new AuthAPI();
 
   useEffect(() => {
-    async function fetchBooks() {
-      try {
-        const bookApi = new BookAPI();
-        const data = await bookApi.getBooksByAge(age);
-
+    const bookApi = new BookAPI();
+    bookApi.searchBooksByTitle(decodedSearch)
+      .then((data) => {
+        console.log(data);
         setBooks(data);
-      } catch (error) {
-        console.error("Fehler beim Abrufen der Bücher:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
+        setPending(false);
+      })
+      .catch((error) => {
+        console.error("Error loading books:", error);
+        setPending(false);
+      });
+  }, [decodedSearch]);
 
-    if (loading) {
-      fetchBooks();
-    }
-  }, [age, loading]);
-
-  if (loading) {
+  if (pending) {
     return <Loading />;
   }
 
@@ -52,24 +48,24 @@ export default function AgeSearchPage({ params }: AgeSearchPageProps) {
         <Image src="/reeda-logo.png" width={200} height={160} alt="Logo" />
         <CloseButton url="/catalog" />
       </div>
-      <h1 className="text-3xl font-bold mb-4">Bücher für das Alter { icon }</h1>
+      <h1 className="text-3xl font-bold mb-4">Ergebnisse für:<br />{decodedSearch}</h1>
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
         {books.length > 0 ? (
           books.map((book) => (
             <BookCard
-              key={book.id}
-              id={book.id}
               title={book.title}
               author={book.author}
+              key={book.id}
               introduction={book.introduction}
               bookCoverId={book.bookCoverId}
               numPages={book.numPages}
+              userId={authAPI.getUserId() || undefined}
             />
           ))
         ) : (
-          `No books found for age ${age} ${icon}.`
+          <p>Keine Bücher gefunden</p>
         )}
       </div>
     </div>
-  );
+  )
 }

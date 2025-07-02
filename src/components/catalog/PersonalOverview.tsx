@@ -46,7 +46,7 @@ export default function PersonalBooksSection() {
   }, [loading, setComponentLoading]);
 
   return (
-    <Section title="Your Books" variant="grid" className="pt-10">
+    <Section title="Deine Bücher" variant="grid" className="pt-16" hideButton={true}>
       {loading ? (
         <div className="col-span-2 text-sm text-muted-foreground">Loading…</div>
       ) : userBooks.length > 0 ? (
@@ -55,7 +55,7 @@ export default function PersonalBooksSection() {
             id={entry.book.id}
             key={entry.book.id}
             title={entry.book.title}
-            bookCoverId={entry.book.bookCoverId} // Placeholder image, replace with actual image URL if available
+            bookCoverId={entry.book.bookCoverId}
             author={entry.book.author}
             introduction={entry.book.introduction}
             bookPage={entry.bookPage}
