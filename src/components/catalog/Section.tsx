@@ -20,7 +20,7 @@ export function Section({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <section className={cn("mb-8", className)}>
+    <section className={cn("mb-6 relative z-0 clear-both", className)}>
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-lg font-bold">{title}</h2>
         <button
@@ -39,27 +39,27 @@ export function Section({
         </button>
       </div>
       {expanded ? (
-        // Expanded: Books in grid layout, 2 columns on mobile
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        // Expanded: Books in grid layout with consistent spacing and no overlap
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 auto-rows-max">
           {children}
         </div>
       ) : variant === "grid" ? (
-        // Grid: 2 columns on mobile, more on larger screens
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        // Grid: Consistent grid layout with proper spacing
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 auto-rows-max">
           {children}
         </div>
       ) : (
-        // Standard: Horizontal scrollable books
+        // Standard: Horizontal scrollable books with consistent spacing
         <ScrollArea className="w-full">
-          <div className="flex gap-4 min-w-full">
+          <div className="flex gap-4 min-w-full pb-2">
             {Array.isArray(children) ? (
               children.map((child, index) => (
-                <div key={index} className="w-[calc(50%-0.5rem)] flex-shrink-0">
+                <div key={index} className="w-[150px] max-w-[150px] flex-shrink-0">
                   {child}
                 </div>
               ))
             ) : (
-              <div className="w-[calc(50%-0.5rem)] flex-shrink-0">
+              <div className="w-[150px] max-w-[150px] flex-shrink-0">
                 {children}
               </div>
             )}

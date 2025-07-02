@@ -39,7 +39,7 @@ export default function CategoryOverview() {
   }, [loading, setComponentLoading]);
 
   return (
-    <div className="w-full max-w-none space-y-8">
+    <div className="w-full max-w-none space-y-6 mt-4">
       {loading ? (
         <div className="text-sm text-muted-foreground">Loading…</div>
       ) : (
