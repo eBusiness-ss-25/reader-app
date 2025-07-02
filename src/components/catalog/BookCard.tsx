@@ -77,7 +77,7 @@ export function BookCard({
               )}
               {showProgress && (
                 <div className="absolute bottom-0 left-0 w-full px-2 pb-2 z-10">
-                  <Progress value={progress} className="h-2 bg-white/30" />
+                  <Progress value={progress} className="h-2 bg-muted-foreground" />
                 </div>
               )}
             </Card>

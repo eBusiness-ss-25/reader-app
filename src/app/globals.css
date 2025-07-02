@@ -43,6 +43,10 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+html {
+  font-family: var(--font-comic), ui-sans-serif, system-ui;
+}
+
 :root {
   /* Kindgerechtes Pastell-Theme */
   --radius: 0.75rem;
