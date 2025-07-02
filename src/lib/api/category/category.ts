@@ -70,5 +70,6 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
   icon?: string;
+  categoryImageId?: string;
   Books?: Book[];
 }
