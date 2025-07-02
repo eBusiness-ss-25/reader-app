@@ -85,7 +85,7 @@ export function BookCard({
           </AspectRatio>
         </div>
         </DrawerTrigger>
-        <DrawerContent className="h-full">
+        <DrawerContent className="h-auto">
           {coverUrl && (
             <DrawerHeader>
               <DrawerTitle>
