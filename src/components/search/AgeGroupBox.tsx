@@ -1,6 +1,6 @@
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AgeGroupBox() {
   return (
@@ -10,17 +10,32 @@ export default function AgeGroupBox() {
         <div className="gap-4 grid grid-cols-3">
           <AspectRatio ratio={1 / 1} className="bg-muted rounded-3xl">
             <Link href="/search/age/0">
-              <Button variant="outline" className="w-full h-full text-6xl bg-primary-muted">👶🏻</Button>
+              <Image
+                src="/baby.png"
+                alt="Baby"
+                className="object-cover rounded-3xl"
+                fill
+              />
             </Link>
           </AspectRatio>
           <AspectRatio ratio={1 / 1} className="bg-muted rounded-3xl">
             <Link href="/search/age/4">
-              <Button variant="outline" className="w-full h-full text-6xl bg-primary-muted">🛝</Button>
+              <Image
+                src="/kindergarten.png"
+                alt="Baby"
+                className="object-cover rounded-3xl"
+                fill
+              />
             </Link>
           </AspectRatio>
           <AspectRatio ratio={1 / 1} className="bg-muted rounded-3xl">
             <Link href="/search/age/6">
-              <Button variant="outline" className="w-full h-full text-6xl bg-primary-muted">🎓</Button>
+              <Image
+                src="/grundschule.png"
+                alt="Baby"
+                className="object-cover rounded-3xl"
+                fill
+              />
             </Link>
           </AspectRatio>
         </div>
