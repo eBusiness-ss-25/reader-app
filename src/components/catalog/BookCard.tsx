@@ -84,24 +84,30 @@ export function BookCard({
         </DrawerTrigger>
         <DrawerContent className="h-full">
           {coverUrl && (
-            <div className="flex justify-center px-4 mt-4">
-              <div className="w-2/3 max-w-xs">
-                <AspectRatio ratio={2 / 3} className="w-full">
-                  <Image
-                    src={coverUrl}
-                    alt={title}
-                    fill
-                    className="h-full w-full object-cover rounded-md"
-                  />
-                </AspectRatio>
-              </div>
-            </div>
+            <DrawerHeader>
+              <DrawerTitle>
+                <div className="flex justify-center px-4 mt-4">
+                  <div className="w-2/3 max-w-xs">
+                    <AspectRatio ratio={2 / 3} className="w-full">
+                      <Image
+                        src={coverUrl}
+                        alt={title}
+                        fill
+                        className="h-full w-full object-cover rounded-md"
+                      />
+                    </AspectRatio>
+                  </div>
+                </div>
+              </DrawerTitle>
+            </DrawerHeader>
           )}
-          <DrawerHeader>
-            <DrawerTitle>{title}</DrawerTitle>
-            <DrawerDescription>{author}</DrawerDescription>
-          </DrawerHeader>
-          <b className="px-8 py-4">Description</b>
+          {!coverUrl && 
+            <DrawerHeader>
+              <DrawerTitle>{title}</DrawerTitle>
+              <DrawerDescription>{author}</DrawerDescription>
+            </DrawerHeader>
+          }
+          <br />
           <div className="px-8">{introduction}</div>
           <DrawerFooter>
             <Button disabled={!userId}>
