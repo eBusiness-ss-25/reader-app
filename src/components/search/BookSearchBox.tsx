@@ -25,9 +25,13 @@ export default function BookSearchBox() {
             className={value === "h-12" ? "text-center placeholder-transparent h-12" : "text-start h-12"}
           />
         </div>
-        <Link href={`/search/title/${encodeURIComponent(value)}`} className="w-full">
-          <Button disabled={value === ""} className="w-full">Suchen</Button>
-        </Link>
+        {value === "" ? (
+          <Button disabled className="w-full">Suchen</Button>
+        ) : (
+          <Link href={`/search/title/${encodeURIComponent(value)}`} className="w-full">
+            <Button className="w-full">Suchen</Button>
+          </Link>
+        )}
       </div>
     </div>
   );
