@@ -5,6 +5,7 @@ import ReaderAPI from "@/lib/api/reader/reader";
 import { Switch } from "../ui/switch";
 import CloseButton from "../common/CloseButton";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import BookAPI from "@/lib/api/book/book";
 
 export function Reader({ bookId }: { bookId: string }) {
   const { pages, error, loading } = useBook(bookId);
@@ -13,8 +14,32 @@ export function Reader({ bookId }: { bookId: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasPlayed, setHasPlayed] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
+  const [maxVisitedPageIdx, setMaxVisitedPageIdx] = useState(0);
 
   const currentPage = pages[currentPageIdx];
+
+  // fetch user book progress
+  useEffect(() => {
+    let isMounted = true;
+    const fetchProgress = async () => {
+      const api = new BookAPI();
+      const userBooks = await api.getBooksForUser();
+      const userBook = userBooks.find((ub) => ub.bookId === bookId);
+      if (userBook && typeof userBook.bookPage === "number" && isMounted) {
+        setCurrentPageIdx(userBook.bookPage);
+        setMaxVisitedPageIdx(userBook.bookPage);
+      }
+    };
+    fetchProgress();
+    return () => {
+      isMounted = false;
+    };
+  }, [bookId]);
+
+  // Track highest page visited
+  useEffect(() => {
+    setMaxVisitedPageIdx((prev) => Math.max(prev, currentPageIdx));
+  }, [currentPageIdx]);
 
   useEffect(() => {
     if (!currentPage) return;
@@ -32,6 +57,16 @@ export function Reader({ bookId }: { bookId: string }) {
   useEffect(() => {
     setHasPlayed(false);
   }, [videoUrl]);
+
+  // update user book progress
+  useEffect(() => {
+    return () => {
+      if (pages.length > 0) {
+        const api = new ReaderAPI();
+        api.updateBookPage(bookId, maxVisitedPageIdx);
+      }
+    };
+  }, [bookId, maxVisitedPageIdx, pages.length]);
 
   return (
     <Card className="relative w-full h-full flex flex-col overflow-hidden bg-gradient-to-b from-white to-yellow-50 shadow-lg max-w-2xl mx-auto">
