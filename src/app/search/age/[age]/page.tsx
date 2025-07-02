@@ -58,7 +58,12 @@ export default function AgeSearchPage({ params }: AgeSearchPageProps) {
           books.map((book) => (
             <BookCard
               key={book.id}
+              id={book.id}
               title={book.title}
+              author={book.author}
+              introduction={book.introduction}
+              bookCoverId={book.bookCoverId}
+              numPages={book.numPages}
             />
           ))
         ) : (
