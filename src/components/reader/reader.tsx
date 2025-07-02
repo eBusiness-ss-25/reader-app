@@ -58,7 +58,7 @@ export function Reader({ bookId }: { bookId: string }) {
     setHasPlayed(false);
   }, [videoUrl]);
 
-  // update user book progress (only if progress increased)
+  // update user book progress
   useEffect(() => {
     let storedBookPage: number | null = null;
     const fetchStoredProgress = async () => {
