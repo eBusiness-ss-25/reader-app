@@ -47,9 +47,10 @@ export function BookCard({
     <div className="w-full">
       <Drawer>
         <DrawerTrigger asChild>
-          <AspectRatio ratio={2 / 3} className="w-full">
-            <Card className="h-full w-full bg-gradient-to-br from-purple-400 to-pink-400 shadow-md text-white overflow-hidden rounded-md relative">
-              {coverUrl ? (
+          <div className="w-full p-0.5 bg-gradient-to-r from-red-500 via-yellow-400 to-blue-500 rounded-lg hover:shadow-lg hover:shadow-yellow-300/50 transition-all duration-300 hover:scale-[1.02]">
+            <AspectRatio ratio={2 / 3} className="w-full">
+              <Card className="h-full w-full bg-gradient-to-br from-purple-400 to-pink-400 shadow-md text-white overflow-hidden rounded-md relative">
+                {coverUrl ? (
                 <>
                   <Image
                     src={coverUrl}
@@ -76,11 +77,12 @@ export function BookCard({
               )}
               {showProgress && (
                 <div className="absolute bottom-0 left-0 w-full px-2 pb-2 z-10">
-                  <Progress value={progress} className="h-2 bg-white/30" />
+                  <Progress value={progress} className="h-2 bg-muted-foreground" />
                 </div>
               )}
             </Card>
           </AspectRatio>
+        </div>
         </DrawerTrigger>
         <DrawerContent className="h-full">
           {coverUrl && (
