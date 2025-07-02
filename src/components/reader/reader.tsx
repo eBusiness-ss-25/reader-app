@@ -84,8 +84,8 @@ export function Reader({ bookId }: { bookId: string }) {
   }, [bookId, maxVisitedPageIdx, pages]);
 
   return (
-    <Card className="relative w-full h-full flex flex-col overflow-hidden bg-gradient-to-b from-white to-yellow-50 shadow-lg max-w-2xl mx-auto">
-      <div className="absolute top-0 left-0 w-full flex justify-between items-center p-6 z-20">
+    <Card className="relative w-full max-w-full md:max-w-3xl lg:max-w-4xl mx-2 md:mx-auto flex flex-col overflow-hidden bg-gradient-to-b from-white to-yellow-50 shadow-lg">
+      <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4 md:p-6 z-20">
         <div className="flex items-center gap-2">
           <Switch
             checked={soundOn}
@@ -103,9 +103,9 @@ export function Reader({ bookId }: { bookId: string }) {
       {loading && <div className="p-4 text-center">Lade Buch …</div>}
 
       {!loading && currentPage && (
-        <CardContent className="relative flex flex-col flex-1 p-0 pt-20">
+        <CardContent className="relative flex flex-col flex-1 p-0 pt-20 md:pt-24">
           {videoUrl && (
-            <div className="w-full mb-8 flex justify-center relative">
+            <div className="w-full flex justify-center relative mb-4 md:mb-8 px-2 md:px-0">
               <video
                 ref={videoRef}
                 src={videoUrl}
@@ -117,7 +117,7 @@ export function Reader({ bookId }: { bookId: string }) {
                 playsInline
                 controlsList="nodownload nofullscreen noremoteplayback"
                 controls={false}
-                className="rounded-lg shadow-md"
+                className="rounded-lg shadow-md w-full max-w-xl aspect-video"
                 onEnded={() => {
                   setHasPlayed(true);
                   if (videoRef.current) {
@@ -128,13 +128,13 @@ export function Reader({ bookId }: { bookId: string }) {
               />
             </div>
           )}
-          <div className="flex-1 overflow-auto p-8">
+          <div className="flex-1 overflow-auto px-2 md:px-8 pb-4 md:pb-8">
             <div
-              className="prose max-w-none text-gray-800 mb-8"
+              className="prose max-w-none text-gray-800 mb-8 text-base md:text-lg"
               dangerouslySetInnerHTML={{ __html: currentPage.content }}
             />
           </div>
-          <div className="flex justify-between items-center px-8 pb-8">
+          <div className="flex justify-between items-center px-4 md:px-12 pb-6 md:pb-12">
             <button
               onClick={goPrev}
               disabled={currentPageIdx === 0}
