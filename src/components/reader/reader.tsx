@@ -26,8 +26,8 @@ export function Reader({ bookId }: { bookId: string }) {
       const userBooks = await api.getBooksForUser();
       const userBook = userBooks.find((ub) => ub.bookId === bookId);
       if (userBook && typeof userBook.bookPage === "number" && isMounted) {
-        setCurrentPageIdx(userBook.bookPage);
-        setMaxVisitedPageIdx(userBook.bookPage);
+        setCurrentPageIdx(userBook.bookPage - 1);
+        setMaxVisitedPageIdx(userBook.bookPage - 1);
       }
     };
     fetchProgress();
@@ -58,15 +58,30 @@ export function Reader({ bookId }: { bookId: string }) {
     setHasPlayed(false);
   }, [videoUrl]);
 
-  // update user book progress
+  // update user book progress (only if progress increased)
   useEffect(() => {
+    let storedBookPage: number | null = null;
+    const fetchStoredProgress = async () => {
+      const api = new BookAPI();
+      const userBooks = await api.getBooksForUser();
+      const userBook = userBooks.find((ub) => ub.bookId === bookId);
+      storedBookPage = userBook?.bookPage ?? null;
+    };
+    fetchStoredProgress();
+
     return () => {
       if (pages.length > 0) {
         const api = new ReaderAPI();
-        api.updateBookPage(bookId, maxVisitedPageIdx);
+        const maxVisitedPageNumber = pages[maxVisitedPageIdx]?.pageNumber ?? 0;
+        if (
+          storedBookPage === null ||
+          maxVisitedPageNumber + 1 > storedBookPage
+        ) {
+          api.updateBookPage(bookId, maxVisitedPageNumber + 1);
+        }
       }
     };
-  }, [bookId, maxVisitedPageIdx, pages.length]);
+  }, [bookId, maxVisitedPageIdx, pages]);
 
   return (
     <Card className="relative w-full h-full flex flex-col overflow-hidden bg-gradient-to-b from-white to-yellow-50 shadow-lg max-w-2xl mx-auto">

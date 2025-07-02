@@ -49,7 +49,7 @@ export default class ReaderAPI {
     const userBookId = userBook?.id;
     const token = await this.authApi.getAuthToken();
     const url = `${ReaderAPI.apiUrl}/user-book/${userBookId}`;
-    const pageData = { bookPage: bookPage + 1 };
+    const pageData = { bookPage: bookPage };
     await axios.patch(url, pageData, {
       headers: { Authorization: `Bearer ${token}` },
     });
