@@ -40,10 +40,26 @@ export function Reader({ bookId }: { bookId: string }) {
     setMaxVisitedPageIdx((prev) => Math.max(prev, currentPageIdx));
   }, [currentPageIdx]);
 
+  // load video blob so iOS receives a proper MIME type
   useEffect(() => {
     if (!currentPage) return;
     const api = new ReaderAPI();
-    api.getVideoIdByPageId(currentPage.id).then(setVideoUrl);
+    let objectUrl: string | null = null;
+    api.getVideoIdByPageId(currentPage.id)
+      .then(async (url) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        // create a new blob with an explicit mp4 mime type
+        const mp4Blob = new Blob([blob], { type: "video/mp4" });
+        objectUrl = URL.createObjectURL(mp4Blob);
+        setVideoUrl(objectUrl);
+      })
+      .catch(() => setVideoUrl(null));
+    return () => {
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
   }, [currentPage]);
 
   const goPrev = () => {
@@ -103,7 +119,6 @@ export function Reader({ bookId }: { bookId: string }) {
             <div className="w-full flex justify-center relative mb-4 md:mb-8 px-2 md:px-0">
               <video
                 ref={videoRef}
-                src={videoUrl}
                 width={300}
                 height={250}
                 preload="auto"
@@ -113,7 +128,10 @@ export function Reader({ bookId }: { bookId: string }) {
                 controlsList="nodownload nofullscreen noremoteplayback"
                 controls={false}
                 className="rounded-lg shadow-md w-full max-w-xl aspect-video"
-              />
+              >
+                <source src={videoUrl || undefined} type="video/mp4" />
+                Ihr Browser unterstützt dieses Videoformat nicht.
+              </video>
             </div>
           )}
           <div className="flex-1 overflow-auto px-2 md:px-8 pb-4 md:pb-8">
