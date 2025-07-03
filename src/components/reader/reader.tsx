@@ -3,6 +3,8 @@ import { useBook } from "@/lib/hooks/useBook";
 import ReaderAPI from "@/lib/api/reader/reader";
 import { Switch } from "../ui/switch";
 import CloseButton from "../common/CloseButton";
+import { AspectRatio } from "../ui/aspect-ratio";
+import { Skeleton } from "../ui/skeleton";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import BookAPI from "@/lib/api/book/book";
 
@@ -131,8 +133,8 @@ export function Reader({ bookId }: { bookId: string }) {
 
       {!loading && currentPage && (
         <div className="relative flex flex-col flex-1 p-0 md:pt-24">
-          {videoUrl && (
-            <div className="w-full flex justify-center relative mb-4 md:mb-8 px-2 md:px-0">
+          <div className="w-full flex justify-center relative mb-4 md:mb-8 px-2 md:px-0">
+            {videoUrl ? (
               <video
                 ref={videoRef}
                 width={300}
@@ -148,8 +150,12 @@ export function Reader({ bookId }: { bookId: string }) {
                 <source src={videoUrl || undefined} type="video/mp4" />
                 Ihr Browser unterstützt dieses Videoformat nicht.
               </video>
-            </div>
-          )}
+            ) : (
+              <AspectRatio ratio={16 / 9} className="w-full max-w-xl">
+                <Skeleton className="w-full h-full" />
+              </AspectRatio>
+            )}
+          </div>
           <div className="flex-1 overflow-auto px-2 md:px-8 pb-4 md:pb-8">
             <div
               className="prose max-w-none text-gray-800 mb-8 text-base md:text-lg"
