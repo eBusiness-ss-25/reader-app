@@ -35,7 +35,7 @@ function CatalogContent() {
   return (
     <>
       {(isLoading || loading) && <Loading />}
-      <div className="flex min-h-screen flex-col w-full max-w-3xl mx-auto py-8 px-4 sm:px-8 gap-4">
+      <div className="flex min-h-screen flex-col w-full mx-auto py-8 px-4 sm:px-8 gap-4">
         <Navbar />
         <PersonalOverview />
         <CategoryOverview categories={categories} />

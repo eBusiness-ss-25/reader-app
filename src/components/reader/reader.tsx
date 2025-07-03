@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { useBook } from "@/lib/hooks/useBook";
 import ReaderAPI from "@/lib/api/reader/reader";
 import { Switch } from "../ui/switch";
 import CloseButton from "../common/CloseButton";
+import { AspectRatio } from "../ui/aspect-ratio";
+import { Skeleton } from "../ui/skeleton";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import BookAPI from "@/lib/api/book/book";
 
@@ -40,11 +41,44 @@ export function Reader({ bookId }: { bookId: string }) {
     setMaxVisitedPageIdx((prev) => Math.max(prev, currentPageIdx));
   }, [currentPageIdx]);
 
+  // load video blob so iOS receives a proper MIME type
   useEffect(() => {
     if (!currentPage) return;
+    // hide the old video immediately while the new one is loading
+    setVideoUrl(null);
+
     const api = new ReaderAPI();
-    api.getVideoIdByPageId(currentPage.id).then(setVideoUrl);
+    let objectUrl: string | null = null;
+    let cancelled = false;
+    api
+      .getVideoIdByPageId(currentPage.id)
+      .then(async (url) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        // create a new blob with an explicit mp4 mime type
+        const mp4Blob = new Blob([blob], { type: "video/mp4" });
+        objectUrl = URL.createObjectURL(mp4Blob);
+        if (!cancelled) {
+          setVideoUrl(objectUrl);
+        } else {
+          URL.revokeObjectURL(objectUrl);
+        }
+      })
+      .catch(() => setVideoUrl(null));
+    return () => {
+      cancelled = true;
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
   }, [currentPage]);
+
+  // reload the video element when url changes so source updates correctly
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load();
+    }
+  }, [videoUrl]);
 
   const goPrev = () => {
     if (currentPageIdx > 0) setCurrentPageIdx((idx) => idx - 1);
@@ -79,8 +113,8 @@ export function Reader({ bookId }: { bookId: string }) {
   }, [bookId, maxVisitedPageIdx, pages]);
 
   return (
-    <Card className="relative w-full max-w-full md:max-w-3xl lg:max-w-4xl mx-2 md:mx-auto flex flex-col overflow-hidden bg-gradient-to-b from-white to-yellow-50 shadow-lg">
-      <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4 md:p-6 z-20">
+    <div className="h-screen flex flex-col">
+      <div className="top-0 left-0 w-full flex justify-between items-center p-4 md:p-6 z-20">
         <div className="flex items-center gap-2">
           <Switch
             checked={soundOn}
@@ -98,12 +132,11 @@ export function Reader({ bookId }: { bookId: string }) {
       {loading && <div className="p-4 text-center">Lade Buch …</div>}
 
       {!loading && currentPage && (
-        <CardContent className="relative flex flex-col flex-1 p-0 pt-20 md:pt-24">
-          {videoUrl && (
-            <div className="w-full flex justify-center relative mb-4 md:mb-8 px-2 md:px-0">
+        <div className="relative flex flex-col flex-1 p-0 md:pt-24">
+          <div className="w-full flex justify-center relative mb-4 md:mb-8 px-2 md:px-0">
+            {videoUrl ? (
               <video
                 ref={videoRef}
-                src={videoUrl}
                 width={300}
                 height={250}
                 preload="auto"
@@ -113,16 +146,23 @@ export function Reader({ bookId }: { bookId: string }) {
                 controlsList="nodownload nofullscreen noremoteplayback"
                 controls={false}
                 className="rounded-lg shadow-md w-full max-w-xl aspect-video"
-              />
-            </div>
-          )}
+              >
+                <source src={videoUrl || undefined} type="video/mp4" />
+                Ihr Browser unterstützt dieses Videoformat nicht.
+              </video>
+            ) : (
+              <AspectRatio ratio={16 / 9} className="w-full max-w-xl">
+                <Skeleton className="w-full h-full" />
+              </AspectRatio>
+            )}
+          </div>
           <div className="flex-1 overflow-auto px-2 md:px-8 pb-4 md:pb-8">
             <div
               className="prose max-w-none text-gray-800 mb-8 text-base md:text-lg"
               dangerouslySetInnerHTML={{ __html: currentPage.content }}
             />
           </div>
-          <div className="flex justify-between items-center px-4 md:px-12 pb-6 md:pb-12">
+          <div className="flex justify-between items-center px-4 md:px-12 pb-6 md:pb-12 mt-auto">
             <button
               onClick={goPrev}
               disabled={currentPageIdx === 0}
@@ -151,8 +191,8 @@ export function Reader({ bookId }: { bookId: string }) {
               <ChevronRightIcon size={32} />
             </button>
           </div>
-        </CardContent>
+        </div>
       )}
-    </Card>
+    </div>
   );
 }
