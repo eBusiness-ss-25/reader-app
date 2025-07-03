@@ -85,7 +85,7 @@ export function BookCard({
           </AspectRatio>
         </div>
         </DrawerTrigger>
-        <DrawerContent className="h-auto">
+        <DrawerContent className="h-auto scroll-auto">
           {coverUrl && (
             <DrawerHeader>
               <DrawerTitle>
@@ -113,7 +113,7 @@ export function BookCard({
           <br />
           <div className="px-8">{introduction}</div>
           <DrawerFooter>
-            <Button disabled={!userId}>
+            <Button disabled={!userId} asChild>
               <Link href={`/reader/${id}`}>Lesen</Link>
             </Button>
           </DrawerFooter>
