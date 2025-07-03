@@ -216,7 +216,7 @@ export default function Register() {
       <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3">
         <Checkbox
           id="terms"
-          className="data-[state=checked]:border-accent-foreground data-[state=checked]:bg-background data-[state=checked]:text-foreground"
+          className="data-[state=checked]:border-border border-border data-[state=checked]:bg-background data-[state=checked]:text-foreground"
           checked={values.termsAccepted}
           aria-invalid={!!errors.termsAccepted}
           onCheckedChange={() => {
