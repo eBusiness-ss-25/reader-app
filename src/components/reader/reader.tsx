@@ -45,22 +45,36 @@ export function Reader({ bookId }: { bookId: string }) {
     if (!currentPage) return;
     const api = new ReaderAPI();
     let objectUrl: string | null = null;
-    api.getVideoIdByPageId(currentPage.id)
+    let cancelled = false;
+    api
+      .getVideoIdByPageId(currentPage.id)
       .then(async (url) => {
         const response = await fetch(url);
         const blob = await response.blob();
         // create a new blob with an explicit mp4 mime type
         const mp4Blob = new Blob([blob], { type: "video/mp4" });
         objectUrl = URL.createObjectURL(mp4Blob);
-        setVideoUrl(objectUrl);
+        if (!cancelled) {
+          setVideoUrl(objectUrl);
+        } else {
+          URL.revokeObjectURL(objectUrl);
+        }
       })
       .catch(() => setVideoUrl(null));
     return () => {
+      cancelled = true;
       if (objectUrl) {
         URL.revokeObjectURL(objectUrl);
       }
     };
   }, [currentPage]);
+
+  // reload the video element when url changes so source updates correctly
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load();
+    }
+  }, [videoUrl]);
 
   const goPrev = () => {
     if (currentPageIdx > 0) setCurrentPageIdx((idx) => idx - 1);
