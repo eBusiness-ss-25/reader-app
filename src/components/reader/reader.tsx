@@ -141,6 +141,7 @@ export function Reader({ bookId }: { bookId: string }) {
                 height={250}
                 preload="auto"
                 autoPlay
+                loop
                 muted={!soundOn}
                 playsInline
                 controlsList="nodownload nofullscreen noremoteplayback"

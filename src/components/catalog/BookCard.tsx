@@ -52,38 +52,43 @@ export function BookCard({
             <AspectRatio ratio={2 / 3} className="w-full">
               <Card className="h-full w-full bg-gradient-to-br from-purple-400 to-pink-400 shadow-md text-white overflow-hidden rounded-md relative">
                 {coverUrl ? (
-                <>
-                  <Image
-                    src={coverUrl}
-                    alt={title}
-                    fill
-                    className="object-cover w-full h-full rounded-md"
-                    style={{ objectFit: "cover" }}
-                  />
-                </>
-              ) : (
-                <CardContent className="p-4 flex flex-col justify-between h-full">
-                  {title && (
-                    <div className="font-semibold text-base mb-1">{title}</div>
-                  )}
-                  {author && (
-                    <div className="text-xs text-white/80 mb-2">{author}</div>
-                  )}
-                  {introduction && (
-                    <div className="text-xs text-white/70 line-clamp-3">
-                      {introduction}
-                    </div>
-                  )}
-                </CardContent>
-              )}
-              {showProgress && (
-                <div className="absolute bottom-0 left-0 w-full px-2 pb-2 z-10">
-                  <Progress value={progress} className="h-2 bg-muted-foreground" />
-                </div>
-              )}
-            </Card>
-          </AspectRatio>
-        </div>
+                  <>
+                    <Image
+                      src={coverUrl}
+                      alt={title}
+                      fill
+                      className="object-cover w-full h-full rounded-md"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </>
+                ) : (
+                  <CardContent className="p-4 flex flex-col justify-between h-full">
+                    {title && (
+                      <div className="font-semibold text-base mb-1">
+                        {title}
+                      </div>
+                    )}
+                    {author && (
+                      <div className="text-xs text-white/80 mb-2">{author}</div>
+                    )}
+                    {introduction && (
+                      <div className="text-xs text-white/70 line-clamp-3">
+                        {introduction}
+                      </div>
+                    )}
+                  </CardContent>
+                )}
+                {showProgress && (
+                  <div className="absolute bottom-0 left-0 w-full px-2 pb-2 z-10">
+                    <Progress
+                      value={progress}
+                      className="h-2 bg-muted-foreground"
+                    />
+                  </div>
+                )}
+              </Card>
+            </AspectRatio>
+          </div>
         </DrawerTrigger>
         <DrawerContent className="h-auto scroll-auto">
           {coverUrl && (
@@ -104,18 +109,22 @@ export function BookCard({
               </DrawerTitle>
             </DrawerHeader>
           )}
-          {!coverUrl && 
+          {!coverUrl && (
             <DrawerHeader>
               <DrawerTitle>{title}</DrawerTitle>
               <DrawerDescription>{author}</DrawerDescription>
             </DrawerHeader>
-          }
+          )}
           <br />
           <div className="px-8">{introduction}</div>
           <DrawerFooter>
-            <Button disabled={!userId} asChild>
-              <Link href={`/reader/${id}`}>Lesen</Link>
-            </Button>
+            {userId ? (
+              <Button asChild>
+                <Link href={`/reader/${id}`}>Lesen</Link>
+              </Button>
+            ) : (
+              <Button disabled={true}>Frag deine Eltern</Button>
+            )}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
