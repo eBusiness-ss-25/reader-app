@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { useBook } from "@/lib/hooks/useBook";
 import ReaderAPI from "@/lib/api/reader/reader";
 import { Switch } from "../ui/switch";
@@ -79,8 +78,8 @@ export function Reader({ bookId }: { bookId: string }) {
   }, [bookId, maxVisitedPageIdx, pages]);
 
   return (
-    <Card className="relative w-full max-w-full md:max-w-3xl lg:max-w-4xl mx-2 md:mx-auto flex flex-col overflow-hidden bg-gradient-to-b from-white to-yellow-50 shadow-lg">
-      <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4 md:p-6 z-20">
+    <div className="h-screen flex flex-col">
+      <div className="top-0 left-0 w-full flex justify-between items-center p-4 md:p-6 z-20">
         <div className="flex items-center gap-2">
           <Switch
             checked={soundOn}
@@ -98,7 +97,7 @@ export function Reader({ bookId }: { bookId: string }) {
       {loading && <div className="p-4 text-center">Lade Buch …</div>}
 
       {!loading && currentPage && (
-        <CardContent className="relative flex flex-col flex-1 p-0 pt-20 md:pt-24">
+        <div className="relative flex flex-col flex-1 p-0 md:pt-24">
           {videoUrl && (
             <div className="w-full flex justify-center relative mb-4 md:mb-8 px-2 md:px-0">
               <video
@@ -122,7 +121,7 @@ export function Reader({ bookId }: { bookId: string }) {
               dangerouslySetInnerHTML={{ __html: currentPage.content }}
             />
           </div>
-          <div className="flex justify-between items-center px-4 md:px-12 pb-6 md:pb-12">
+          <div className="flex justify-between items-center px-4 md:px-12 pb-6 md:pb-12 mt-auto">
             <button
               onClick={goPrev}
               disabled={currentPageIdx === 0}
@@ -151,8 +150,8 @@ export function Reader({ bookId }: { bookId: string }) {
               <ChevronRightIcon size={32} />
             </button>
           </div>
-        </CardContent>
+        </div>
       )}
-    </Card>
+    </div>
   );
 }
