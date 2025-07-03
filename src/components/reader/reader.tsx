@@ -43,6 +43,9 @@ export function Reader({ bookId }: { bookId: string }) {
   // load video blob so iOS receives a proper MIME type
   useEffect(() => {
     if (!currentPage) return;
+    // hide the old video immediately while the new one is loading
+    setVideoUrl(null);
+
     const api = new ReaderAPI();
     let objectUrl: string | null = null;
     let cancelled = false;
