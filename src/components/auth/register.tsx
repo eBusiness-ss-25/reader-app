@@ -213,10 +213,10 @@ export default function Register() {
       {errors.birthDate && (
         <p className="text-destructive text-sm">{errors.birthDate}</p>
       )}
-      <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-accent has-[[aria-checked=true]]:bg-accent-muted">
+      <Label className="hover:bg-accent/50 flex items-start gap-3 rounded-lg border p-3">
         <Checkbox
           id="terms"
-          className="data-[state=checked]:border-accent data-[state=checked]:bg-accent data-[state=checked]:text-white"
+          className="data-[state=checked]:border-accent-foreground data-[state=checked]:bg-background data-[state=checked]:text-foreground"
           checked={values.termsAccepted}
           aria-invalid={!!errors.termsAccepted}
           onCheckedChange={() => {
