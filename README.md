@@ -18,6 +18,10 @@ The catalog page presents a personal overview followed by several book categorie
 
 The search page lets readers look for books in three different ways. A free-text search box filters books by title. Age group buttons provide shortcuts for common reading ages. Theme world buttons show all available categories retrieved from the backend API. Search results are displayed as cards, each linking back to the catalog for easy exploration.
 
+### Reader
+
+When a video is loading the reader shows a 16:9 skeleton placeholder. This keeps the layout stable and indicates that the file is being fetched.
+
 ## Quick Start Guide
 
 ### System Requirements
